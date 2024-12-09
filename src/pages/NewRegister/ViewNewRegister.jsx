@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Page from "../../layout/Layout";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import BASE_URL from "../../base/BaseUrl";
+import BASE_URL, { ImagePath, NoImagePath } from "../../base/BaseUrl";
 import ReactToPrint from "react-to-print";
+import toast from "react-hot-toast";
 import {
   Building2,
   Phone,
@@ -36,17 +37,19 @@ const ViewNewRegister = () => {
   const printRef = useRef(null);
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState([]);
+  const [image, setImage] = useState("");
 
   const getTemplateData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-by-id/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       if (res.data?.user) {
         setData(res.data.user);
+        setImage(res.data.user.profile_photo);
       } else {
         throw new Error("User data is missing");
       }
@@ -100,95 +103,65 @@ const ViewNewRegister = () => {
   return (
     <Page>
       <div className=" container mx-auto px-4 py-6">
-        {/* <div className=" ">
-          <ReactToPrint
-            trigger={() => (
-              <Button
-                variant="outlined"
-                size="sm"
-                className=" right-10 top-10  bg-gray-500 "
-              >
-                <Printer className="mr-2 h-4 w-4" /> Print Directory
-              </Button>
-            )}
-            content={() => printRef.current}
-            documentTitle={`Directory-${data.name_of_firm}`}
-            pageStyle={`
-              @page {
-                size: auto;
-                margin: 2mm;
-              }
-              @media print {
-                body {
-                  border: 1px solid #000;
-                  margin: 1mm;
-                  padding: 1mm;
-                  min-height: 100vh;
-                }
-                .print-hide {
-                  display: none;
-                }
-              }
-            `}
-          />
-        </div> */}
-
         <Card
           ref={printRef}
           className="w-full shadow-2xl rounded-xl print:shadow-none print:rounded-none overflow-hidden"
         >
-          {/* Header Section */}
-          <div className="bg-gradient-to-r from-primary to-primary/10 text-white p-6">
-            <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="bg-gradient-to-r from-red-100 to-red-50/10 text-white p-6">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-6">
-                {data.image && (
-                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white print:shadow-none shadow-lg">
+                {/* Profile Image Section */}
+                <div className="flex justify-center rounded-full">
+                  {image ? (
                     <img
-                      src={`https://agsrebuild.store/public/app_images/directory/${data.image}`}
-                      alt={`${data.name_of_firm} Logo`}
-                      className="w-full h-full object-cover"
+                      src={`${ImagePath}/${image}`}
+                      alt="Profile"
+                      className="h-20 w-20 md:h-32 md:w-32  rounded-full border-8 border-white/30"
                     />
-                  </div>
-                )}
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">
-                    {data.name_of_firm}
+                  ) : (
+                    <img
+                      src={NoImagePath}
+                      alt="No image available"
+                      className="h-20 w-20 md:h-32 md:w-32 rounded-full"
+                    />
+                  )}
+                </div>
+
+                <div className="text-center md:text-left">
+                  <h1 className="text-xl md:text-3xl font-bold mb-2 text-pink-500">
+                    {data.name}
                   </h1>
-                  <Badge color="blue" className="text-sm">
-                    {data.membership_category}
-                  </Badge>
+                  <h2 className="text-lg md:text-xl font-semibold text-pink-400">
+                    {data.profile_gender}
+                  </h2>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 p-6">
-            {/* Contact Information */}
-            <div className="bg-secondary/10 p-5 print:rounded-none rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 flex items-center text-primary">
-                <User className="mr-3 h-6 w-6" /> Contact Information
-              </h2>
-              <div className="space-y-3 grid pgrid-cols-2 print:gap-1">
-                <DetailRow label="Contact Person" value={data.contact_person} />
-                <DetailRow label="Office Phone" value={data.office_ph_no} />
-                <DetailRow label="Cell Phone" value={data.cell_no} />
-                <DetailRow label="Email" value={data.mail_id} />
-                {data.fax_no && <DetailRow label="Fax" value={data.fax_no} />}
-                {data.website && (
-                  <DetailRow label="Website" value={data.website} />
-                )}
-                <div className="print:col-span-2">
-                  <DetailRow label="Address" value={data.contact_address} />
-                </div>
+          <div className="bg-secondary/10 p-5 print:rounded-none rounded-lg">
+            <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
+              <User className="mr-3 h-6 w-6" /> Contact Information
+            </h2>
+            <div className="grid md:grid-cols- gap-6">
+              <DetailRow label="Contact Person" value={data.contact_person} />
+              <DetailRow label="Office Phone" value={data.office_ph_no} />
+              <DetailRow label="Cell Phone" value={data.cell_no} />
+              <DetailRow label="Email" value={data.mail_id} />
+              {data.fax_no && <DetailRow label="Fax" value={data.fax_no} />}
+              {data.website && (
+                <DetailRow label="Website" value={data.website} />
+              )}
+              <div className="print:col-span-2">
+                <DetailRow label="Address" value={data.contact_address} />
               </div>
             </div>
 
-            {/* Business Details */}
             <div className="bg-secondary/10 p-5 print:rounded-none rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 flex items-center text-primary">
-                <ShoppingBag className="mr-3 h-6 w-6" /> Business Details
+              <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
+                <ShoppingBag className="mr-3 h-6 w-6 " /> Business Details
               </h2>
-              <div className="space-y-3 print:grid print:grid-cols-3 print:gap-1">
+              <div className="grid md:grid-cols-4 gap-6">
                 <DetailRow
                   label="Nature of Business"
                   value={data.nature_of_business}
@@ -198,12 +171,11 @@ const ViewNewRegister = () => {
               </div>
             </div>
 
-            {/* Additional Information */}
             <div className="bg-secondary/10 p-5 print:rounded-none rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 flex items-center text-primary">
+              <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
                 <Shield className="mr-3 h-6 w-6" /> Additional Details
               </h2>
-              <div className="space-y-3 print:grid print:grid-cols-3 print:gap-1">
+              <div className="grid md:grid-cols-4 gap-6">
                 {!data.year_of_establishment && (
                   <DetailRow
                     label="Year of Establishment"

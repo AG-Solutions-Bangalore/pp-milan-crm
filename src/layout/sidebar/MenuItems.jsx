@@ -12,8 +12,12 @@ import {
   IconProgressCheck,
   IconUserUp,
   IconInfoHexagon,
+  IconUserPlus,
+  IconFriends,
+  IconMan,
+  IconClockX,
 } from "@tabler/icons-react";
-
+import { IconWoman } from "@tabler/icons-react";
 const getMenuItems = (userTypeId) => [
   {
     navlabel: true,
@@ -27,89 +31,103 @@ const getMenuItems = (userTypeId) => [
     href: "/home",
   },
   {
-    id: "template",
-    title: "Template",
-    icon: IconTemplate,
-    href: "/templates",
+    id: "newregister",
+    title: "New Register",
+    icon: IconUserPlus,
+    href: "/newregister",
   },
   {
-    id: "campaign",
-    title: "Campaign",
-    icon: IconBrandCampaignmonitor,
-    href: "/campaigns",
+    id: "married",
+    title: "Married",
+    icon: IconFriends,
+    href: "/married",
+  },
+  {
+    id: "male",
+    title: "Male",
+    icon: IconMan,
+    href: "/male",
+  },
+  {
+    id: "female",
+    title: "Female",
+    icon: IconWoman,
+    href: "/female",
+  },
+  {
+    id: "validity",
+    title: "Validity",
+    icon: IconClockX,
+    href: "/validity",
   },
 
-  {
-    navlabel: true,
-    subheader: "Contact",
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Contact",
+  // },
 
-  {
-    id: "contact",
-    title: "Contact",
-    icon: IconPhone,
-    // href: "/table",
-    subItems: [
-      // for nested sum menu item
-      {
-        id: "sub-contact",
-        title: "Contact",
-        icon: IconPhone,
-        href: "/Contact",
-      },
-      {
-        id: "group",
-        title: "Group",
-        icon: IconUsersGroup,
-        href: "/group",
-      },
-    ],
-  },
+  // {
+  //   id: "contact",
+  //   title: "Contact",
+  //   icon: IconPhone,
+  //   subItems: [
+  //     {
+  //       id: "sub-contact",
+  //       title: "Contact",
+  //       icon: IconPhone,
+  //       href: "/Contact",
+  //     },
+  //     {
+  //       id: "group",
+  //       title: "Group",
+  //       icon: IconUsersGroup,
+  //       href: "/group",
+  //     },
+  //   ],
+  // },
 
-  {
-    navlabel: true,
-    subheader: "Summary",
-  },
-  {
-    id: "report",
-    title: "Report",
-    icon: IconReport,
-    // href: "/",
-    subItems: [
-      // for nested sum menu item
-      {
-        id: "read",
-        title: "Read",
-        icon: IconBook,
-        href: "/report/read",
-      },
-      {
-        id: "unsubscribe",
-        title: "Unsubscribe",
-        icon: IconUserMinus,
-        href: "/report/unsubscribe",
-      },
-      {
-        id: "Visited",
-        title: "Visted/checked",
-        icon: IconProgressCheck,
-        href: "/report/visted",
-      },
-      {
-        id: "campaignSent",
-        title: "Campaign Sent",
-        icon: IconUserUp,
-        href: "/report/campaign",
-      },
-    ],
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Summary",
+  // },
+  // {
+  //   id: "report",
+  //   title: "Report",
+  //   icon: IconReport,
+  //   subItems: [
+  //     {
+  //       id: "read",
+  //       title: "Read",
+  //       icon: IconBook,
+  //       href: "/report/read",
+  //     },
+  //     {
+  //       id: "unsubscribe",
+  //       title: "Unsubscribe",
+  //       icon: IconUserMinus,
+  //       href: "/report/unsubscribe",
+  //     },
+  //     {
+  //       id: "Visited",
+  //       title: "Visted/checked",
+  //       icon: IconProgressCheck,
+  //       href: "/report/visted",
+  //     },
+  //     {
+  //       id: "campaignSent",
+  //       title: "Campaign Sent",
+  //       icon: IconUserUp,
+  //       href: "/report/campaign",
+  //     },
+  //   ],
+  // },
 
-  {
-    id: "about",
-    title: "About Developer",
-    icon: IconInfoHexagon,
-    href: "/developer",
-  },
+  // {
+  //   id: "about",
+  //   title: "About Developer",
+  //   icon: IconInfoHexagon,
+  //   href: "/developer",
+  // },
 ];
 
 export default getMenuItems;

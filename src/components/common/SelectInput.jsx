@@ -1,12 +1,21 @@
 import React from "react";
 
-const SelectInput = ({ label, name, value, options, onChange, required }) => {
+const SelectInput = ({
+  label,
+  name,
+  options,
+  value,
+  onChange,
+  onBlur,
+  required,
+  ErrorMessage,
+}) => {
   const inputClassSelect =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-green-500";
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-green-500";
 
   return (
     <div>
-      <label className="block text-sm  font-semibold text-grey mb-1">
+      <label className="block text-sm font-semibold text-grey mb-1">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -14,6 +23,7 @@ const SelectInput = ({ label, name, value, options, onChange, required }) => {
         name={name}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         required={required}
         className={inputClassSelect}
       >
@@ -24,6 +34,13 @@ const SelectInput = ({ label, name, value, options, onChange, required }) => {
           </option>
         ))}
       </select>
+      {ErrorMessage && (
+        <ErrorMessage
+          name={name}
+          component="div"
+          className="text-red-500 text-xs mt-1"
+        />
+      )}
     </div>
   );
 };

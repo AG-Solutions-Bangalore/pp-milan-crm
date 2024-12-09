@@ -28,6 +28,13 @@ import Setting from "./pages/Setting/Setting";
 import ReportReadView from "./pages/Report/ReportRead/ReportView";
 import ReportCampaginView from "./pages/Report/ReportCampagin/ReportCampaginView";
 import ReportVisitedView from "./pages/Report/ReportVisited/ReportVisitedView";
+import NewRegister from "./pages/NewRegister/NewRegister";
+import Married from "./pages/Married/Married";
+import Male from "./pages/Male/Male";
+import Female from "./pages/Female/Female";
+import Validity from "./pages/Validity/Validity";
+import EditNewRegister from "./pages/NewRegister/EditNewRegister";
+import ViewNewRegister from "./pages/NewRegister/ViewNewRegister";
 const App = () => {
   return (
     <>
@@ -59,7 +66,7 @@ const App = () => {
         <Route path="/report/view" element={<ReportReadView />} />
         <Route path="/report/unsubscribe" element={<ReportUnsubscribe />} />
 
-        <Route path="/report/visted" element={<ReportVisted/>} />
+        <Route path="/report/visted" element={<ReportVisted />} />
         <Route path="/report/visted/view" element={<ReportVisitedView />} />
         <Route path="/report/campaign" element={<ReportCampagin />} />
         <Route path="/report/campaign/view" element={<ReportCampaginView />} />
@@ -78,6 +85,15 @@ const App = () => {
 
         {/* //setting */}
         <Route path="/setting" element={<Setting />} />
+
+        {/* //PPM */}
+        <Route path="/newregister" element={<NewRegister />} />
+        <Route path="/newregister/edit/:id" element={<EditNewRegister />} />
+        <Route path="/newregister/view/:id" element={<ViewNewRegister />} />
+        <Route path="/married" element={<Married />} />
+        <Route path="/male" element={<Male />} />
+        <Route path="/female" element={<Female />} />
+        <Route path="/validity" element={<Validity />} />
       </Routes>
     </>
   );
