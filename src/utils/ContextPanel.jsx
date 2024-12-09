@@ -60,6 +60,14 @@ const AppProvider = ({ children }) => {
           "/report/view",
           "/report/campaign/view",
           "/report/visted",
+          //ppm
+          "/newregister",
+          "/married",
+          "/male",
+          "/female",
+          "/validity",
+          "/newregister/edit",
+          "/newregister/view",
         ];
 
         const isAllowedPath = allowedPath.some((path) =>
@@ -87,7 +95,7 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     checkPanelStatus();
-    const intervalId = setInterval(checkPanelStatus, 60000);
+    const intervalId = setInterval(checkPanelStatus, 600000);
     return () => clearInterval(intervalId);
   }, []);
 
