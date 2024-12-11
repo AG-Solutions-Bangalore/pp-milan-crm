@@ -181,7 +181,6 @@ export default function NavItem({
           {...listItemProps}
           disabled={item?.disabled}
           selected={pathDirect === item?.href}
-          //chnage mm
 
           onClick={(e) => {
             if (item?.subItems) {
@@ -189,21 +188,15 @@ export default function NavItem({
               handleToggle();
             }
           }}
-          // onClick={item?.subItems ? handleToggle : undefined} // Only toggle if subItems exist
           sx={{
             "&:hover": {
               ".MuiListItemIcon-root": {
                 color: item.bgcolor + ".main",
-                //backgroundColor: level < 2 ? menu.bgcolor + ".light" : "",
               },
             },
             "&:hover::before": {
               backgroundColor: item.bgcolor + ".light",
             },
-            // ".MuiListItemIcon-root": {
-            //   color: item.bgcolor + ".main",
-            //   backgroundColor: item.bgcolor + ".light",
-            // },
             "&.Mui-selected": {
               color:
                 level > 1

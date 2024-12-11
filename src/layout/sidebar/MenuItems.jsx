@@ -16,6 +16,7 @@ import {
   IconFriends,
   IconMan,
   IconClockX,
+  IconMessage,
 } from "@tabler/icons-react";
 import { IconWoman } from "@tabler/icons-react";
 const getMenuItems = (userTypeId) => [
@@ -60,6 +61,18 @@ const getMenuItems = (userTypeId) => [
     icon: IconClockX,
     href: "/validity",
   },
+  {
+    id: "feedback",
+    title: "Feedback",
+    icon: IconMessage,
+    href: "/feedback",
+  },
+  // {
+  //   id: "download",
+  //   title: "Download",
+  //   icon: IconMessage,
+  //   href: "/feedback",
+  // },
 
   // {
   //   navlabel: true,

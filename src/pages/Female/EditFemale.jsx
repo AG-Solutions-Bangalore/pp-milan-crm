@@ -41,12 +41,16 @@ const validationSchema = Yup.object({
   ),
   profile_working_city: Yup.string().required("City is required"),
   profile_village_city: Yup.string().required("Village is required"),
-  profile_photo: Yup.mixed().required("Image is required"),
+
+  payment_amount: Yup.string()
+    .matches(/^\d+$/, "Amount must be only numbers")
+    .required("Amount Contact is required"),
+  payment_trans: Yup.string().required("PaymentTrans is required"),
 });
 
-const EditNewRegister = () => {
+const EditFemale = () => {
   const [activeTab, setActiveTab] = useState("contact");
-  const [newregister, setNewRegister] = useState({
+  const [female, setFemale] = useState({
     name: "",
     profile_date_of_birth: "",
     profile_gender: "",
@@ -77,7 +81,7 @@ const EditNewRegister = () => {
     profile_admin_note: "",
   });
 
-  console.log(newregister, "file");
+  console.log(female, "file");
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
@@ -99,7 +103,7 @@ const EditNewRegister = () => {
       });
 
       if (res.data?.user) {
-        setNewRegister(res.data.user);
+        setFemale(res.data.user);
         setSelectedGender(res.data.user.profile_gender);
         setImage(res.data.user.profile_photo);
       } else {
@@ -142,7 +146,7 @@ const EditNewRegister = () => {
 
     try {
       await axios.put(
-        `${BASE_URL}/panel-update-new-registration/${id}`,
+        `${BASE_URL}/panel-update-male-female/${id}`,
         {
           profile_whatsapp: values.profile_whatsapp,
           profile_main_contact_num: values.profile_main_contact_num,
@@ -157,6 +161,10 @@ const EditNewRegister = () => {
           profile_validity_ends: values.profile_validity_ends,
           email: values.email,
           name: values.name,
+          payment_amount: values.payment_amount,
+          payment_type: values.payment_type,
+          payment_trans: values.payment_trans,
+          payment_status: values.payment_status,
           profile_admin_note: values.profile_admin_note,
           profile_ref_contact_mobile: values.profile_ref_contact_mobile,
         },
@@ -166,10 +174,10 @@ const EditNewRegister = () => {
           },
         }
       );
-      toast.success("Register Updated Successfully");
-      navigate("/newregister");
+      toast.success("Femlae Updated Successfully");
+      navigate("/female");
     } catch (error) {
-      toast.error("Error updating Register");
+      toast.error("Error updating Femlae");
       console.error(error);
     } finally {
       setIsButtonDisabled(false);
@@ -205,19 +213,16 @@ const EditNewRegister = () => {
     { value: "Online", label: "Online" },
   ];
 
-
-
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
         <div className="sticky top-0 p-2 mb-4 border-b-2 border-green-500 bg-red-50 rounded-lg flex">
           <h2 className="px-5 text-black text-lg flex items-center gap-2 p-2">
             <IconInfoCircle className="w-4 h-4" />
-            Edit NewRegister
+            Edit Femlae
           </h2>
 
-          {/* <Box className="mt-2"> */}
-          {/* <Tabs
+          <Tabs
             value={activeTab}
             onChange={handleTabChange}
             aria-label="tabs"
@@ -243,11 +248,11 @@ const EditNewRegister = () => {
                 </div>
               }
             />
-          </Tabs> */}
+          </Tabs>
           {/* </Box> */}
         </div>
         <Formik
-          initialValues={newregister}
+          initialValues={female}
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={onSubmit}
@@ -258,7 +263,7 @@ const EditNewRegister = () => {
               className="w-full max-w-7xl mx-auto  space-y-8"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4">
-                {/* {activeTab === "contact" && ( */}
+                {activeTab === "contact" && (
                   <div className="lg:col-span-9">
                     <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-4 gap-6">
                       <div>
@@ -480,12 +485,6 @@ const EditNewRegister = () => {
                           // onBlur={handleBlur}
                           className={inputClass}
                         />
-
-                        <ErrorMessage
-                          name="profile_photo"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
                       </div>
                       <div className="flex justify-center">
                         {image ? (
@@ -547,9 +546,9 @@ const EditNewRegister = () => {
                       </div>
                     </div>
                   </div>
-                {/* )} */}
-                {/* {activeTab === "payment" && ( */}
-                  {/* <div className="lg:col-span-9">
+                )}
+                {activeTab === "payment" && (
+                  <div className="lg:col-span-9">
                     <div className="grid grid-cols-1 p-2   gap-6">
                       <div>
                         <FormLabel required>Payment Amount</FormLabel>
@@ -621,8 +620,8 @@ const EditNewRegister = () => {
                         />
                       </div>
                     </div>
-                  </div> */}
-                {/* )} */}
+                  </div>
+                )}
 
                 <div className="lg:col-span-3">
                   <div className="border-2 h-[35rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
@@ -685,7 +684,7 @@ const EditNewRegister = () => {
 
                 <Button
                   className="w-36 text-white bg-red-600"
-                  onClick={() => navigate("/newregister")}
+                  onClick={() => navigate("/female")}
                 >
                   Back
                 </Button>
@@ -710,4 +709,4 @@ const DetailRow = ({ icon, label, value }) => (
   </div>
 );
 
-export default EditNewRegister;
+export default EditFemale;

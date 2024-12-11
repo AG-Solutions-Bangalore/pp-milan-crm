@@ -35,6 +35,14 @@ import Female from "./pages/Female/Female";
 import Validity from "./pages/Validity/Validity";
 import EditNewRegister from "./pages/NewRegister/EditNewRegister";
 import ViewNewRegister from "./pages/NewRegister/ViewNewRegister";
+import Testing from "./pages/Testing";
+import EditMarried from "./pages/Married/EditMarried";
+import ViewMarriage from "./pages/Married/ViewMarriage";
+import EditMale from "./pages/Male/EditMale";
+import ViewMale from "./pages/Male/ViewMale";
+import EditFemale from "./pages/Female/EditFemale";
+import ViewFemlae from "./pages/Female/ViewFemale";
+import Feedback from "./pages/Feedback/Feedback";
 const App = () => {
   return (
     <>
@@ -91,9 +99,18 @@ const App = () => {
         <Route path="/newregister/edit/:id" element={<EditNewRegister />} />
         <Route path="/newregister/view/:id" element={<ViewNewRegister />} />
         <Route path="/married" element={<Married />} />
+        <Route path="/married/edit/:id" element={<EditMarried />} />
+        <Route path="/married/view/:id" element={<ViewMarriage />} />
         <Route path="/male" element={<Male />} />
+        <Route path="/male/edit/:id" element={<EditMale />} />
+        <Route path="/male/view/:id" element={<ViewMale />} />
         <Route path="/female" element={<Female />} />
+        <Route path="/female/edit/:id" element={<EditFemale />} />
+        <Route path="/female/view/:id" element={<ViewFemlae />} />
         <Route path="/validity" element={<Validity />} />
+        <Route path="/feedback" element={<Feedback />} />
+        {/* <Route path="/feedback" element={<Feedback />} /> */}
+        <Route path="/testing" element={<Testing />} />
       </Routes>
     </>
   );

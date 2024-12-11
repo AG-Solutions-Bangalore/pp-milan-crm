@@ -12,10 +12,12 @@ import PropTypes from "prop-types";
 
 // components
 import Profile from "./Profile";
-import {
-  IconMenu,
-  IconMenuDeep,
-} from "@tabler/icons-react";
+import { IconMenu, IconMenuDeep } from "@tabler/icons-react";
+import { IconInfoOctagon } from "@tabler/icons-react";
+import { IconDownload } from "@tabler/icons-react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import BASE_URL from "../../base/BaseUrl";
 
 // interface ItemType {
 //   toggleMobileSidebar: (event: React.MouseEvent<HTMLElement>) => void;
@@ -24,7 +26,36 @@ import {
 const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  const handleDownload = async () => {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      toast.error("No token found. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${BASE_URL}/panel-download-biodata`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "biodata.pdf");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast.success("Download successful!");
+    } catch (error) {
+      console.error("Error downloading biodata:", error);
+      toast.error("Failed to download biodata.");
+    }
+  };
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: theme.palette.background.paper,
@@ -69,16 +100,19 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
           <IconMenuDeep width="20" height="20" />
         </IconButton>
 
-    
         <Box flexGrow={1} />
-        <Stack
-          spacing={1}
-          direction="row"
-          alignItems="center"
-      
-        >
-    
 
+        <Stack spacing={1} direction="row" alignItems="center">
+          <Tooltip title="BioData" arrow>
+            {" "}
+            <IconDownload
+              width={20}
+              className="cursor-pointer text-black"
+              onClick={handleDownload}
+            />
+          </Tooltip>
+        </Stack>
+        <Stack spacing={1} direction="row" alignItems="center">
           <Tooltip title="Profile" arrow>
             <Profile />
           </Tooltip>

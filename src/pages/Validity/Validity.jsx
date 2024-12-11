@@ -177,7 +177,7 @@ const Validity = () => {
       <Box className="max-w-screen">
         {isLoading ? (
           <Center style={{ height: "70vh", flexDirection: "column" }}>
-            <Loader size="lg" variant="dots" color="blue" />
+            <Loader size="lg" variant="dots" color="pink" />
             <Text mt="md" color="gray" size="lg">
               Loading, please wait...
             </Text>
