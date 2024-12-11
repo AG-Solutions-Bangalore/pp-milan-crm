@@ -86,6 +86,7 @@ const EditMarried = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
   const [education, setEducation] = useState([]);
+  const [payment, setPayment] = useState([]);
   const [image, setImage] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
@@ -114,6 +115,24 @@ const EditMarried = () => {
       toast.error("Failed to load user data");
     }
   };
+  const getPayment = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/panel-fetch-payment-mode`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.data?.paymentMode) {
+        setPayment(res.data.paymentMode);
+      } else {
+        throw new Error("Payment data is missing");
+      }
+    } catch (error) {
+      console.error("Failed to fetch Payment:", error);
+      toast.error("Failed to load Payment data");
+    }
+  };
   console.log(selectedGender, "genferSS");
   const getEducationdata = async () => {
     try {
@@ -137,6 +156,7 @@ const EditMarried = () => {
   useEffect(() => {
     getTemplateData();
     getEducationdata();
+    getPayment();
   }, [id]);
 
   // };
@@ -582,7 +602,10 @@ const EditMarried = () => {
                         <SelectInput
                           label="Payment Type"
                           name="payment_type"
-                          options={paymentType}
+                          options={payment.map((item) => ({
+                            value: item.payment_mode,
+                            label: item.payment_mode,
+                          }))}
                           value={values.payment_type}
                           // required={true}
                           onChange={handleChange}
