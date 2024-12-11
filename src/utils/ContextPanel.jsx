@@ -39,28 +39,6 @@ const AppProvider = ({ children }) => {
       if (token) {
         const allowedPath = [
           "/home",
-          //template
-          // "/templates",
-          // "/templates/add",
-          // "/campaigns",
-          // "/campaigns/add",
-          // "/campaigns/view",
-          // "/report/read",
-          // "/report/unsubscribe",
-          // "/report/visted",
-          // "/report/campaign",
-          // "/Contact",
-          // "/Contact/edit",
-          // "/group",
-          // "/group/add",
-          // "/group/edit",
-          // "/developer",
-          // "/test",
-          // "/setting",
-          // "/report/view",
-          // "/report/campaign/view",
-          // "/report/visted",
-          //ppm
           "/newregister",
           "/married",
           "/male",

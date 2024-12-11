@@ -51,6 +51,7 @@ const NewRegister = () => {
     payment_trans: "",
     profile_validity_ends: "",
   });
+  const [payment, setPayment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const fetchRegisterData = async () => {
@@ -72,15 +73,35 @@ const NewRegister = () => {
       setIsLoading(false);
     }
   };
+  const getPayment = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`${BASE_URL}/panel-fetch-payment-mode`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      if (res.data?.paymentMode) {
+        setPayment(res.data.paymentMode);
+      } else {
+        throw new Error("Payment data is missing");
+      }
+    } catch (error) {
+      console.error("Failed to fetch Payment:", error);
+      toast.error("Failed to load Payment data");
+    }
+  };
   useEffect(() => {
     fetchRegisterData();
   }, []);
+
   const [openDialog1, setOpenDialog1] = useState(false);
   const [postId, setPostId] = useState(null);
   const handleOpenDialog = (id) => {
     setPostId(id);
     setOpenDialog1(true);
+    getPayment();
   };
 
   const handleCloseDialog = () => {
@@ -353,7 +374,10 @@ const NewRegister = () => {
                           <SelectInput
                             label="Payment Type"
                             name="payment_type"
-                            options={paymentType}
+                            options={payment.map((item) => ({
+                              value: item.payment_mode,
+                              label: item.payment_mode,
+                            }))}
                             value={values.payment_type}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -434,7 +458,6 @@ const NewRegister = () => {
           }}
         </Formik>
       </Dialog>
-      ;
     </Layout>
   );
 };
