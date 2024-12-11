@@ -12,10 +12,15 @@ import bachelor from "/src/assets/dashboard/bachelor.png";
 import add from "/src/assets/dashboard/add.png";
 
 import { Center, Loader, Text } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 Chart.register(ArcElement, ...registerables);
-const DashboardCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+const DashboardCard = ({ title, value, icon: Icon, color, onClick }) => (
+  <div
+    className="bg-white rounded-lg overflow-hidden shadow-sm cursor-pointer"
+    onClick={onClick}
+  >
+    {" "}
     <div className="p-6 border-b border-gray-100">
       <div className="flex items-center justify-between">
         <div>
@@ -41,6 +46,7 @@ const DashboardCard = ({ title, value, icon: Icon, color }) => (
 const Home = () => {
   const [result, setResult] = useState([]);
   const [loadingDashboardData, setLoadingDashboardData] = useState(true);
+  const navigate = useNavigate();
 
   const isLoading = loadingDashboardData;
 
@@ -73,12 +79,14 @@ const Home = () => {
       value: result.user_new_registration_count,
       icon: add,
       color: "bg-green-600",
+      onClick: () => navigate("/newregister"),
     },
     {
       title: "Married",
       value: result.user_married_count,
       icon: married,
       color: "bg-pink-600",
+      onClick: () => navigate("/married"),
     },
     {
       title: "UnMarried",
@@ -91,12 +99,14 @@ const Home = () => {
       value: result.user_male_count,
       icon: man,
       color: "bg-amber-600",
+      onClick: () => navigate("/male"),
     },
     {
       title: "Female",
       value: result.user_female_count,
       icon: women,
       color: "bg-blue-600",
+      onClick: () => navigate("/female"),
     },
   ];
 
@@ -105,7 +115,7 @@ const Home = () => {
       <div className=" bg-gray-100 ">
         {isLoading ? (
           <Center style={{ height: "70vh", flexDirection: "column" }}>
-            <Loader size="lg" variant="dots" color="blue" />
+            <Loader size="lg" variant="dots" color="pink" />
             <Text mt="md" color="gray" size="lg">
               Loading, please wait...
             </Text>
@@ -121,6 +131,7 @@ const Home = () => {
                   value={card.value}
                   icon={card.icon}
                   color={card.color}
+                  onClick={card.onClick}
                 />
               ))}
             </div>

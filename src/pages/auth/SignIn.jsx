@@ -62,6 +62,10 @@ const SignIn = () => {
           res.data.UserInfo.user.profile_type
         );
         localStorage.setItem("email", res.data.UserInfo.user.email);
+        localStorage.setItem(
+          "profile_photo",
+          res.data.UserInfo.user.profile_photo
+        );
 
         if (token) {
           localStorage.setItem("token", token);

@@ -9,7 +9,7 @@ import { User } from "lucide-react";
 import { Card } from "@material-tailwind/react";
 import { IconCurrencyRupee, IconFriends } from "@tabler/icons-react";
 import moment from "moment";
-const ViewNewRegister = () => {
+const ViewMarriage = () => {
   const { id } = useParams();
   const printRef = useRef(null);
   const [data, setData] = useState([]);
@@ -186,4 +186,4 @@ const DetailRow = ({ icon, label, value }) => (
   </div>
 );
 
-export default ViewNewRegister;
+export default ViewMarriage;

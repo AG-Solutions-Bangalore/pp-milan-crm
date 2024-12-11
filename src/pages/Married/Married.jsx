@@ -100,7 +100,7 @@ const Married = () => {
               <IconEye
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
-                  navigate(`/templates/view/${row.original.id}`);
+                  navigate(`/married/view/${row.original.id}`);
                 }}
               />
             </Tooltip>
@@ -108,15 +108,7 @@ const Married = () => {
               <IconEdit
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
-                  navigate(`/templates/edit/${row.original.id}`);
-                }}
-              />
-            </Tooltip>
-            <Tooltip label="Activation" position="top" withArrow>
-              <IconRadioactive
-                className="cursor-pointer text-blue-600 hover:text-blue-800"
-                onClick={() => {
-                  navigate(`/templates/activate/${row.original.id}`);
+                  navigate(`/married/edit/${row.original.id}`);
                 }}
               />
             </Tooltip>
@@ -174,7 +166,7 @@ const Married = () => {
       <Box className="max-w-screen">
         {isLoading ? (
           <Center style={{ height: "70vh", flexDirection: "column" }}>
-            <Loader size="lg" variant="dots" color="blue" />
+            <Loader size="lg" variant="dots" color="pink" />
             <Text mt="md" color="gray" size="lg">
               Loading, please wait...
             </Text>

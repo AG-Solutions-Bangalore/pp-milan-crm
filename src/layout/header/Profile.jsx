@@ -12,14 +12,18 @@ import {
 } from "@mui/material";
 import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { IconMail, IconUser, IconCircleX } from "@tabler/icons-react";
+import {
+  IconMail,
+  IconUser,
+  IconCircleX,
+  IconInfoOctagon,
+} from "@tabler/icons-react";
 import Logout from "../../components/Logout";
 import axios from "axios";
-import BASE_URL from "../../base/BaseUrl";
+import BASE_URL, { ImagePath, NoImagePath } from "../../base/BaseUrl";
 import toast from "react-hot-toast";
 import SelectInput from "../../components/common/SelectInput";
 import { IconSettings } from "@tabler/icons-react";
-import logo from "../../../public/user_1.png";
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = React.useState(null);
   const [openModal, setOpenModal] = React.useState(false);
@@ -109,10 +113,7 @@ const Profile = () => {
         },
       });
       if (res.status === 200) {
-        // console.log(res.status, "satus");
-        // console.log("start");
         toast.success("Profile Updated Successfully!");
-        // console.log("end");
 
         handleClose();
       }
@@ -181,6 +182,9 @@ const Profile = () => {
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-green-500";
 
+  const profilePhoto = localStorage.getItem("profile_photo");
+  const imagePath = profilePhoto ? `${ImagePath}${profilePhoto}` : NoImagePath;
+
   return (
     <Box>
       <IconButton
@@ -197,7 +201,7 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={logo}
+          src={imagePath}
           alt="image"
           sx={{
             width: 35,
@@ -206,9 +210,7 @@ const Profile = () => {
           }}
         />
       </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
+
       <Menu
         id="msgs-menu"
         anchorEl={anchorEl2}
@@ -235,6 +237,7 @@ const Profile = () => {
           </ListItemIcon>
           <ListItemText>Change Password</ListItemText>
         </MenuItem>
+
         <MenuItem onClick={() => navigate("/setting")}>
           <ListItemIcon>
             <IconSettings width={20} />
@@ -252,6 +255,7 @@ const Profile = () => {
           </Button>
         </Box>
       </Menu>
+
       <Logout open={openModal} handleOpen={handleOpenLogout} />
       {/*........................................... //Profile ......................................................*/}
       <Dialog
