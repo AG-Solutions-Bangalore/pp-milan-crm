@@ -19,6 +19,9 @@ import ViewMale from "./pages/Male/ViewMale";
 import EditFemale from "./pages/Female/EditFemale";
 import ViewFemlae from "./pages/Female/ViewFemale";
 import Feedback from "./pages/Feedback/Feedback";
+import Notification from "./pages/Notification/Notification";
+import CreateNotification from "./pages/Notification/CreateNotification";
+import EditNotification from "./pages/Notification/EditNotification";
 const App = () => {
   return (
     <>
@@ -53,6 +56,9 @@ const App = () => {
         <Route path="/female/view/:id" element={<ViewFemlae />} />
         <Route path="/validity" element={<Validity />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/notification/add" element={<CreateNotification />} />
+        <Route path="/notification/edit/:id" element={<EditNotification />} />
       </Routes>
     </>
   );

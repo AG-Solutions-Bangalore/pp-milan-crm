@@ -110,6 +110,7 @@ const NewRegister = () => {
   };
   const columns = useMemo(
     () => [
+
       {
         accessorKey: "profile_photo",
         header: "Profile Photo",
@@ -119,21 +120,54 @@ const NewRegister = () => {
           const imagePath = profilePhoto
             ? `${ImagePath}${profilePhoto}`
             : NoImagePath;
+          const [loading, setLoading] = useState(true);
 
           return (
-            <img
-              src={imagePath}
-              alt={profilePhoto ? "Profile" : "No Profile"}
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
+            <div
+              style={{ position: "relative", width: "50px", height: "50px" }}
+            >
+              {loading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(0, 0, 0, 0.1)",
+                      borderTop: "2px solid #4F46E5",
+                      borderRadius: "50%",
+                      animation: "spin 1s linear infinite",
+                    }}
+                  />
+                </div>
+              )}
+              <img
+                src={imagePath}
+                alt={profilePhoto ? "Profile" : "No Profile"}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  display: loading ? "none" : "block",
+                }}
+                onLoad={() => setLoading(false)}
+              />
+            </div>
           );
         },
       },
+
       {
         accessorKey: "name",
         header: "Name",
@@ -274,7 +308,7 @@ const NewRegister = () => {
   );
   // console.log(postId);
   const inputClass =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-green-500";
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
   // console.log(newregister1);
   return (
     <Layout>
@@ -306,8 +340,8 @@ const NewRegister = () => {
           initialValues={newregister1}
           validationSchema={validationSchema}
           enableReinitialize
-          onSubmit={(values, { handleReset }) => {
-            handleReset();
+          onSubmit={(values, actions) => {
+            actions.resetForm();
             // resetForm({
             //   values: {
             //     name: "",

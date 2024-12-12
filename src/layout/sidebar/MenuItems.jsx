@@ -1,3 +1,4 @@
+import { IconBellRinging } from "@tabler/icons-react";
 import {
   IconCopy,
   IconLayoutDashboard,
@@ -67,12 +68,12 @@ const getMenuItems = (userTypeId) => [
     icon: IconMessage,
     href: "/feedback",
   },
-  // {
-  //   id: "download",
-  //   title: "Download",
-  //   icon: IconMessage,
-  //   href: "/feedback",
-  // },
+  {
+    id: "notification",
+    title: "Notification",
+    icon: IconBellRinging,
+    href: "/notification",
+  },
 
   // {
   //   navlabel: true,

@@ -2,70 +2,46 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import axios from "axios";
 import BASE_URL, { ImagePath, NoImagePath } from "../../base/BaseUrl";
-import { IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconCurrencyRupee,
+  IconInfoCircle,
+  IconPhone,
+} from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { ButtonGroup, Button } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../components/common/SelectInput";
+import { Tab, Tabs } from "@mui/material";
+import moment from "moment";
 
 const validationSchema = Yup.object({
-  name: Yup.string().required("Template name is required"),
-  profile_date_of_birth: Yup.string().required("Profile date is required"),
-  profile_gender: Yup.string().required("Gender is required"),
   profile_permanent_address: Yup.string().required("Address is required"),
-  profile_time_of_birth: Yup.string().required("Time is required"),
-  profile_comunity_name: Yup.string().required("Community is required"),
-  profile_gotra: Yup.string().required("Gotra is required"),
   profile_education: Yup.string().required("Education is required"),
   profile_occupation: Yup.string().required("Occupation is required"),
-  email: Yup.string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  profile_mobile: Yup.number()
-    .required("PhoneNumber is required")
-    .min(1000000000, "Phone number must be exactly 10 digits")
-    .max(9999999999, "Phone number must be exactly 10 digits"),
-  profile_whatsapp: Yup.number()
-    .required("PhoneNumber is required")
-    .min(1000000000, "Phone number must be exactly 10 digits")
-    .max(9999999999, "Phone number must be exactly 10 digits"),
-  profile_main_contact_num: Yup.number()
-    .required("PhoneNumber is required")
-    .min(1000000000, "Phone number must be exactly 10 digits")
-    .max(9999999999, "Phone number must be exactly 10 digits"),
 
-  profile_height: Yup.string().required("Height is required"),
-  profile_father_full_name: Yup.string().required("fathername is required"),
+  profile_whatsapp: Yup.string()
+    .matches(/^\d+$/, "Whatsapp must be only numbers")
+    .required("Whatsapp is required")
+    .length(10, "Whatsapp must be exactly 10 digits"),
+  profile_main_contact_num: Yup.string()
+    .matches(/^\d+$/, "Main Contact must be only numbers")
+    .required("Main Contact is required")
+    .length(10, "Main Contact must be exactly 10 digits"),
+  profile_ref_contact_mobile: Yup.string()
+    .matches(/^\d+$/, "Ref Contact must be only numbers")
+    .required("Ref Contact is required")
+    .length(10, "Ref Contact must be exactly 10 digits"),
+
   profile_ref_contact_name: Yup.string().required("Ref Contact is required"),
-  profile_ref_contact_mobile: Yup.string().required("Ref Mobile is required"),
   profile_physical_disablity: Yup.string().required("Disabled is required"),
   profile_have_married_before: Yup.string().required(
     "Married Before is required"
   ),
   profile_working_city: Yup.string().required("City is required"),
   profile_village_city: Yup.string().required("Village is required"),
-  profile_place_of_birth: Yup.string().required("Birth Place is required"),
-  profile_photo: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileSize",
-      "File too large",
-      (value) => value && value.size <= 1048576
-    )
-    .test(
-      "fileType",
-      "Unsupported file format",
-      (value) =>
-        value && ["image/jpg", "image/jpeg", "image/png"].includes(value.type)
-    ),
-  profile_note: Yup.string().required("NOtes is required"),
-  payment_amount: Yup.number().required(" Amount is required"),
-  payment_type: Yup.string().required("PaymentType is required"),
-  payment_trans: Yup.string().required("PaymentTrans is required"),
-  payment_status: Yup.string().required("PaymentStatus is required"),
-  profile_admin_note: Yup.string().required("PaymentAdmin is required"),
+  profile_photo: Yup.mixed().required("Image is required"),
 });
 
 const EditNewRegister = () => {
@@ -94,12 +70,15 @@ const EditNewRegister = () => {
     profile_place_of_birth: "",
     profile_note: "",
     profile_photo: "",
-    payment_amount: "",
-    payment_type: "",
-    payment_trans: "",
-    payment_status: "",
+    // payment_amount: "",
+    // payment_type: "",
+    // payment_trans: "",
+    // payment_status: "",
     profile_admin_note: "",
   });
+
+  console.log(newregister, "file");
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
   const [education, setEducation] = useState([]);
@@ -107,7 +86,7 @@ const EditNewRegister = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
+  console.log(image, "image");
   const getTemplateData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-by-id/${id}`, {
@@ -128,7 +107,7 @@ const EditNewRegister = () => {
       toast.error("Failed to load user data");
     }
   };
-
+  console.log(selectedGender, "genferSS");
   const getEducationdata = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-education`, {
@@ -153,26 +132,156 @@ const EditNewRegister = () => {
     getEducationdata();
   }, [id]);
 
+  // };
+  // const onSubmit = async (values) => {
+  //   console.log("in");
+  //   setIsButtonDisabled(true);
+  //   const formData = new FormData();
+
+  //   formData.append("profile_whatsapp", values.profile_whatsapp);
+  //   formData.append(
+  //     "profile_main_contact_num",
+  //     values.profile_main_contact_num
+  //   );
+  //   formData.append("profile_working_city", values.profile_working_city);
+  //   formData.append(
+  //     "profile_ref_contact_name",
+  //     values.profile_ref_contact_name
+  //   );
+  //   formData.append("profile_village_city", values.profile_village_city);
+  //   formData.append("profile_education", values.profile_education);
+  //   formData.append("profile_occupation", values.profile_occupation);
+  //   formData.append(
+  //     "profile_have_married_before",
+  //     values.profile_have_married_before
+  //   );
+  //   formData.append(
+  //     "profile_physical_disablity",
+  //     values.profile_physical_disablity
+  //   );
+  //   formData.append("profile_note", values.profile_note);
+  //   formData.append("profile_validity_ends", values.profile_validity_ends);
+  //   formData.append("email", values.email);
+  //   formData.append("name", values.name);
+  //   formData.append("profile_photo", image); // Ensure `image` is a File object
+  //   formData.append("profile_admin_note", values.profile_admin_note);
+  //   formData.append(
+  //     "profile_ref_contact_mobile",
+  //     values.profile_ref_contact_mobile
+  //   );
+  //   try {
+  //     await axios.put(
+  //       `${BASE_URL}/panel-update-new-registration/${id}`,
+  //       FormData,
+  //       // {
+  //       // profile_whatsapp: values.profile_whatsapp,
+  //       // profile_main_contact_num: values.profile_main_contact_num,
+  //       // profile_working_city: values.profile_working_city,
+  //       // profile_ref_contact_name: values.profile_ref_contact_name,
+  //       // profile_village_city: values.profile_village_city,
+  //       // profile_education: values.profile_education,
+  //       // profile_occupation: values.profile_occupation,
+  //       // profile_have_married_before: values.profile_have_married_before,
+  //       // profile_physical_disablity: values.profile_physical_disablity,
+  //       // profile_note: values.profile_note,
+  //       // profile_validity_ends: values.profile_validity_ends,
+  //       // email: values.email,
+  //       // name: values.name,
+  //       // profile_photo: image,
+  //       // profile_admin_note: values.profile_admin_note,
+  //       // profile_ref_contact_mobile: values.profile_ref_contact_mobile,
+  //       // },
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //     toast.success("Register Updated Successfully");
+  //     navigate("/newregister");
+  //   } catch (error) {
+  //     toast.error("Error updating Register");
+  //     console.error(error);
+  //   } finally {
+  //     setIsButtonDisabled(false);
+  //   }
+  // };
   const onSubmit = async (values) => {
+    console.log("in");
     setIsButtonDisabled(true);
-    const data = {
-      template_name: values.name,
-      template_subject: values.template_subject,
-      template_design: values.template_design,
-      template_url: values.template_url,
-      template_status: values.template_status,
-      profile_gender: selectedGender,
-    };
+    const formData = new FormData();
+    formData.append("profile_whatsapp", values.profile_whatsapp);
+    formData.append(
+      "profile_main_contact_num",
+      values.profile_main_contact_num
+    );
+    formData.append("profile_working_city", values.profile_working_city);
+    formData.append(
+      "profile_ref_contact_name",
+      values.profile_ref_contact_name
+    );
+    formData.append("profile_village_city", values.profile_village_city);
+    formData.append("profile_education", values.profile_education);
+    formData.append("profile_occupation", values.profile_occupation);
+    formData.append(
+      "profile_have_married_before",
+      values.profile_have_married_before
+    );
+    formData.append(
+      "profile_physical_disablity",
+      values.profile_physical_disablity
+    );
+    formData.append("profile_note", values.profile_note);
+    formData.append("email", values.email);
+    formData.append("name", values.name);
+    formData.append("profile_photo", image);
+    formData.append("profile_admin_note", values.profile_admin_note);
+    formData.append(
+      "profile_ref_contact_mobile",
+      values.profile_ref_contact_mobile
+    );
+
+    formData.append("profile_note", values.profile_note);
+    formData.append("profile_place_of_birth", values.profile_place_of_birth);
+    formData.append(
+      "profile_father_full_name",
+      values.profile_father_full_name
+    );
+    formData.append("profile_mobile", values.profile_mobile);
+    formData.append("profile_gotra", values.profile_ref_contact_mobile);
+
+    formData.append("profile_comunity_name", values.profile_comunity_name);
+
+    formData.append("profile_time_of_birth", values.profile_time_of_birth);
+    formData.append(
+      "profile_permanent_address",
+      values.profile_permanent_address
+    );
+    formData.append("profile_gender", values.profile_gender);
+    formData.append("profile_date_of_birth", values.profile_date_of_birth);
+    formData.append("profile_id", id);
+    formData.append("payment_amount", values.payment_amount);
+    formData.append("payment_type", values.payment_type);
+    formData.append("payment_trans", values.payment_trans);
+    formData.append("payment_status", values.payment_status);
+
     try {
-      await axios.put(`${BASE_URL}/panel-update-template/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.success("Template Updated Successfully");
-      navigate("/templates");
+      // Send the PUT request with the correct `formData`
+      await axios.post(
+        `${BASE_URL}/panel-update-new-registration`,
+        formData, // Corrected to use lowercase `formData`
+        {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("Register Updated Successfully");
+      navigate("/newregister");
     } catch (error) {
-      toast.error("Error updating template");
+      toast.error("Error updating Register");
       console.error(error);
     } finally {
       setIsButtonDisabled(false);
@@ -207,36 +316,15 @@ const EditNewRegister = () => {
     { value: "Cheque", label: "Chequee" },
     { value: "Online", label: "Online" },
   ];
+
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
-        <div className="sticky top-0 p-2 mb-4 border-b-2 border-green-500 bg-red-50 rounded-lg">
+        <div className="sticky top-0 p-2 mb-4 border-b-2 border-green-500 bg-red-50 rounded-lg flex">
           <h2 className="px-5 text-black text-lg flex items-center gap-2 p-2">
             <IconInfoCircle className="w-4 h-4" />
             Edit NewRegister
           </h2>
-          <div className="flex gap-4 mt-2">
-            <button
-              className={`px-4 py-2 rounded-lg ${
-                activeTab === "contact"
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-black"
-              }`}
-              onClick={() => setActiveTab("contact")}
-            >
-              Contact
-            </button>
-            <button
-              className={`px-4 py-2 rounded-lg ${
-                activeTab === "payment"
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-black"
-              }`}
-              onClick={() => setActiveTab("payment")}
-            >
-              Payment
-            </button>
-          </div>
         </div>
         <Formik
           initialValues={newregister}
@@ -250,316 +338,308 @@ const EditNewRegister = () => {
               className="w-full max-w-7xl mx-auto  space-y-8"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4">
-                {activeTab === "contact" && (
-                  <div className="lg:col-span-9">
-                    <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      <div>
-                        <SelectInput
-                          label="Education"
-                          name="profile_education"
-                          options={education.map((item) => ({
-                            value: item.id,
-                            label: item.education_name,
-                          }))}
-                          value={values.profile_education}
-                          required={true}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          ErrorMessage={ErrorMessage}
-                        />
-                      </div>
-
-                      <div>
-                        <FormLabel required>Occupation</FormLabel>
-                        <Field
-                          type="text"
-                          name="profile_occupation"
-                          value={values.profile_occupation}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_occupation"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <FormLabel required>Whatsapp No</FormLabel>
-                        <Field
-                          type="text"
-                          maxLength="10"
-                          name="profile_whatsapp"
-                          value={values.profile_whatsapp}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_whatsapp"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-                      <div>
-                        <FormLabel required>Main Contact No</FormLabel>
-                        <Field
-                          type="text"
-                          maxLength="10"
-                          name="profile_main_contact_num"
-                          value={values.profile_main_contact_num}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_main_contact_num"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <FormLabel required>Refrence Name</FormLabel>
-                        <Field
-                          type="text"
-                          name="profile_ref_contact_name"
-                          value={values.profile_ref_contact_name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_ref_contact_name"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <FormLabel required>Refrence Mobile No</FormLabel>
-                        <Field
-                          type="text"
-                          maxLength="10"
-                          name="profile_ref_contact_mobile"
-                          value={values.profile_main_contact_num}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_ref_contact_mobile"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <SelectInput
-                          label="Physical Disablity (if any)"
-                          name="profile_physical_disablity"
-                          options={Disabled}
-                          onChange={handleChange}
-                          value={values.profile_physical_disablity}
-                          onBlur={handleBlur}
-                          ErrorMessage={ErrorMessage}
-                        />
-                      </div>
-                      <div>
-                        <SelectInput
-                          label="Have you married before?"
-                          name="profile_have_married_before"
-                          options={Marrieed}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.profile_have_married_before}
-                          ErrorMessage={ErrorMessage}
-                        />
-                      </div>
-                      <div>
-                        <FormLabel required>Working City</FormLabel>
-                        <Field
-                          type="text"
-                          name="profile_working_city"
-                          value={values.profile_working_city}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_working_city"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-                      <div>
-                        <FormLabel required>Village, City</FormLabel>
-                        <Field
-                          type="text"
-                          name="profile_village_city"
-                          value={values.profile_village_city}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={inputClass}
-                        />
-                        <ErrorMessage
-                          name="profile_village_city"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <FormLabel>Photo </FormLabel>
-                        <input
-                          type="file"
-                          onChange={(event) => {
-                            setFieldValue(
-                              "profile_photo",
-                              event.currentTarget.files[0]
-                            );
-                          }}
-                          onBlur={handleBlur}
-                          className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        />
-                        <ErrorMessage
-                          name="profile_photo"
-                          component="div"
-                          className="text-red-500 text-xs"
-                        />
-                      </div>
-                      <div className="flex justify-center">
-                        {image ? (
-                          <img
-                            src={`${ImagePath}/${image}`}
-                            alt="Profile"
-                            className="h-20 w-40 object-contain"
-                          />
-                        ) : (
-                          <img
-                            src={NoImagePath}
-                            alt="No image available"
-                            className="h-20 w-35"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {activeTab === "payment" && (
-                  <div className="lg:col-span-9">
-                    <div>
-                      <FormLabel required>Payment Amount</FormLabel>
-                      <Field
-                        type="number"
-                        name="payment_amount"
-                        value={values.payment_amount}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={inputClass}
-                      />
-                      <ErrorMessage
-                        name="payment_amount"
-                        component="div"
-                        className="text-red-500 text-xs"
-                      />
-                    </div>
+                {/* {activeTab === "contact" && ( */}
+                <div className="lg:col-span-9">
+                  <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <SelectInput
-                        label="Payment Type"
-                        name="payment_type"
-                        options={paymentType}
-                        value={values.payment_type}
-                        required={true}
+                        label="Education"
+                        name="profile_education"
+                        options={education.map((item) => ({
+                          value: item.education_name,
+                          label: item.education_name,
+                        }))}
+                        value={values.profile_education}
+                        // required={true}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         ErrorMessage={ErrorMessage}
                       />
                     </div>
+
                     <div>
-                      <SelectInput
-                        label="Payment Status"
-                        name="payment_status"
-                        options={paymentStatus}
-                        value={values.payment_status}
-                        required={true}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        ErrorMessage={ErrorMessage}
-                      />
-                    </div>
-                    <div>
-                      <FormLabel required>Payment Trans</FormLabel>
+                      <FormLabel required>Occupation</FormLabel>
                       <Field
                         type="text"
-                        name="payment_trans"
-                        value={values.payment_trans}
+                        name="profile_occupation"
+                        value={values.profile_occupation}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={inputClass}
+                        // required
                       />
                       <ErrorMessage
-                        name="payment_trans"
+                        name="profile_occupation"
                         component="div"
                         className="text-red-500 text-xs"
                       />
                     </div>
-                  </div>
-                )}
 
-                <div className="grid grid-cols-1 p-2   gap-6">
-                  <div>
-                    <FormLabel required>Address</FormLabel>
-                    <Field
-                      as="textarea"
-                      name="profile_permanent_address"
-                      value={values.profile_permanent_address}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${inputClass} resize-none overflow-y-auto`} // resize-y will allow vertical resizing
-                      rows="2"
-                    />
-                    <ErrorMessage
-                      name="profile_permanent_address"
-                      component="div"
-                      className="text-red-500 text-xs"
-                    />
+                    <div>
+                      <FormLabel required>Whatsapp No</FormLabel>
+                      <Field
+                        type="text"
+                        as="input"
+                        maxLength="10"
+                        name="profile_whatsapp"
+                        value={values.profile_whatsapp}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          value = value.replace(/[^0-9]/g, "");
+                          handleChange({
+                            target: {
+                              name: "profile_whatsapp",
+                              value,
+                            },
+                          });
+
+                          console.log(value, "whatsapp");
+                        }}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        inputMode="numeric"
+                      />
+                      <ErrorMessage
+                        name="profile_whatsapp"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <FormLabel required>Main Contact No</FormLabel>
+                      <Field
+                        type="text"
+                        as="input"
+                        maxLength="10"
+                        name="profile_main_contact_num"
+                        value={values.profile_main_contact_num}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          value = value.replace(/[^0-9]/g, "");
+                          handleChange({
+                            target: {
+                              name: "profile_main_contact_num",
+                              value,
+                            },
+                          });
+
+                          console.log(value, "main cn");
+                        }}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        inputMode="numeric"
+                      />
+                      <ErrorMessage
+                        name="profile_main_contact_num"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <FormLabel required>Refrence Name</FormLabel>
+                      <Field
+                        type="text"
+                        name="profile_ref_contact_name"
+                        value={values.profile_ref_contact_name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        // required
+                      />
+                      <ErrorMessage
+                        name="profile_ref_contact_name"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <FormLabel required>Refrence Mobile No</FormLabel>
+                      <Field
+                        type="text"
+                        as="input"
+                        maxLength="10"
+                        name="profile_ref_contact_mobile"
+                        value={values.profile_ref_contact_mobile}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          value = value.replace(/[^0-9]/g, "");
+                          handleChange({
+                            target: {
+                              name: "profile_ref_contact_mobile",
+                              value,
+                            },
+                          });
+
+                          console.log(value, "main cn");
+                        }}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        inputMode="numeric"
+                      />
+                      <ErrorMessage
+                        name="profile_ref_contact_mobile"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <SelectInput
+                        label="Physical Disablity (if any)"
+                        name="profile_physical_disablity"
+                        options={Disabled}
+                        onChange={handleChange}
+                        value={values.profile_physical_disablity}
+                        onBlur={handleBlur}
+                        ErrorMessage={ErrorMessage}
+                        // required={true}
+                      />
+                    </div>
+                    <div>
+                      <SelectInput
+                        label="Have you married before?"
+                        name="profile_have_married_before"
+                        options={Marrieed}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.profile_have_married_before}
+                        ErrorMessage={ErrorMessage}
+                        // required={true}
+                      />
+                    </div>
+                    <div>
+                      <FormLabel required>Working City</FormLabel>
+                      <Field
+                        type="text"
+                        name="profile_working_city"
+                        value={values.profile_working_city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        // required
+                      />
+
+                      <ErrorMessage
+                        name="profile_working_city"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <FormLabel required>Village, City</FormLabel>
+                      <Field
+                        type="text"
+                        name="profile_village_city"
+                        value={values.profile_village_city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={inputClass}
+                        // required
+                      />
+                      <ErrorMessage
+                        name="profile_village_city"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <FormLabel>Photo </FormLabel>
+                      <input
+                        type="file"
+                        // value={values.profile_main_contact_num}
+                        // onChange={handleFileChange}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setImage(file); // Update local state for the image
+                          setFieldValue("profile_photo", file); // Update Formik field value
+                        }}
+                        // required
+                        // onBlur={handleBlur}
+                        className={inputClass}
+                      />
+
+                      <ErrorMessage
+                        name="profile_photo"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                    <div className="flex justify-center">
+                      {image ? (
+                        <img
+                          src={`${ImagePath}/${image}`}
+                          alt="Profile"
+                          className="h-20 w-40 object-contain"
+                        />
+                      ) : (
+                        <img
+                          src={NoImagePath}
+                          alt="No image available"
+                          className="h-20 w-35"
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <FormLabel required>Important Note</FormLabel>
-                    <Field
-                      as="textarea"
-                      name="profile_note"
-                      value={values.profile_note}
-                      onChange={handleChange}
-                      className={`${inputClass} resize-none overflow-y-auto`}
-                      rows="2"
-                    />
-                  </div>
-                  <div>
-                    <FormLabel>Admin Note</FormLabel>
-                    <Field
-                      as="textarea"
-                      name="profile_admin_note"
-                      value={values.profile_admin_note}
-                      onChange={handleChange}
-                      className={`${inputClass} resize-none overflow-y-auto`}
-                      rows="2"
-                    />
+                  <div className="grid grid-cols-1 p-2   gap-6">
+                    <div>
+                      <FormLabel required>Address</FormLabel>
+                      <Field
+                        as="textarea"
+                        name="profile_permanent_address"
+                        value={values.profile_permanent_address}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${inputClass} resize-none overflow-y-auto`} // resize-y will allow vertical resizing
+                        rows="2"
+                        // required
+                      />
+                      <ErrorMessage
+                        name="profile_permanent_address"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <FormLabel>Important Note</FormLabel>
+                      <Field
+                        as="textarea"
+                        name="profile_note"
+                        value={values.profile_note}
+                        onChange={handleChange}
+                        className={`${inputClass} resize-none overflow-y-auto`}
+                        rows="2"
+                        // required
+                      />
+                    </div>
+                    <div>
+                      <FormLabel>Admin Note</FormLabel>
+                      <Field
+                        as="textarea"
+                        name="profile_admin_note"
+                        value={values.profile_admin_note}
+                        onChange={handleChange}
+                        className={`${inputClass} resize-none overflow-y-auto`}
+                        rows="2"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div className="lg:col-span-3">
-                  <div className="border-2 h-[38rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
+                  <div className="border-2 h-[35rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
                     {" "}
                     <div className="grid grid-cols-1 p-2   gap-6">
                       <DetailRow label="Name" value={values.name} />
                       <DetailRow label="Gender" value={values.profile_gender} />
                       <DetailRow
                         label="Date Of Birth"
-                        value={values.profile_date_of_birth}
+                        // value={values.profile_date_of_birth}
+                        value={moment(values.profile_date_of_birth).format(
+                          "DD-MM-YYYY"
+                        )}
                       />
                       <DetailRow
                         label="Time Of Birth"
@@ -593,10 +673,6 @@ const EditNewRegister = () => {
                         label="Place of Birth "
                         value={values.profile_place_of_birth}
                       />
-                      <DetailRow
-                        label="Place of Birth "
-                        value={values.profile_place_of_birth}
-                      />
                     </div>
                   </div>
                 </div>
@@ -606,12 +682,14 @@ const EditNewRegister = () => {
                   className="w-36 text-white bg-blue-600"
                   type="submit"
                   disabled={isButtonDisabled}
+                  onClick={() => console.log("click")}
                 >
                   {isButtonDisabled ? "Updating..." : "Update"}
                 </Button>
+
                 <Button
                   className="w-36 text-white bg-red-600"
-                  onClick={() => navigate("/templates")}
+                  onClick={() => navigate("/newregister")}
                 >
                   Back
                 </Button>
@@ -638,105 +716,40 @@ const DetailRow = ({ icon, label, value }) => (
 
 export default EditNewRegister;
 
-<Dialog
-  open={openDialog1}
-  onClose={() => setOpenDialog1(false)}
-  keepMounted
-  aria-describedby="alert-dialog-slide-description"
-  sx={{
-    backdropFilter: "blur(5px) sepia(5%)",
-    "& .MuiDialog-paper": {
-      borderRadius: "18px",
-    },
-  }}
->
-  <form autoComplete="off" onSubmit={onChangePassword}>
-    <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
-      <div>
-        <div className="flex justify-between items-center mb-2">
-          <h1 className="text-slate-800 text-xl font-semibold">
-            Change Password
-          </h1>
 
-          <div className="flex " onClick={handleClose1}>
-            <Tooltip title="Close">
-              <button type="button" className="ml-3 pl-2">
-                <IconCircleX />
-              </button>
-            </Tooltip>
-          </div>
-        </div>
 
-        <div className="mt-2 p-4 ">
-          <div className="grid grid-cols-1 p-2   gap-6">
-            <div>
-              <FormLabel required>Payment Amount</FormLabel>
-              <Field
-                type="number"
-                name="payment_amount"
-                value={values.payment_amount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={inputClass}
-              />
-              <ErrorMessage
-                name="payment_amount"
-                component="div"
-                className="text-red-500 text-xs"
-              />
-            </div>
-            <div>
-              <SelectInput
-                label="Payment Type"
-                name="payment_type"
-                options={paymentType}
-                value={values.payment_type}
-                required={true}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                ErrorMessage={ErrorMessage}
-              />
-            </div>
-            <div>
-              <SelectInput
-                label="Payment Status"
-                name="payment_status"
-                options={paymentStatus}
-                value={values.payment_status}
-                required={true}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                ErrorMessage={ErrorMessage}
-              />
-            </div>
-            <div>
-              <FormLabel required>Payment Trans</FormLabel>
-              <Field
-                type="text"
-                name="payment_trans"
-                value={values.payment_trans}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={inputClass}
-              />
-              <ErrorMessage
-                name="payment_trans"
-                component="div"
-                className="text-red-500 text-xs"
-              />
-            </div>
-          </div>
-          <div className="mt-5 flex justify-center">
-            <Button
-              className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 h-15 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md mr-2"
-              disabled={isButtonDisabled}
-              type="submit"
-            >
-              {isButtonDisabled ? "Change..." : "Change Password"}
-            </Button>
-          </div>
-        </div>
+
+
+
+  const [loading, setLoading] = useState(true);
+
+
+<div className="flex justify-center">
+{image ? (
+  <div className="relative h-20 w-40">
+    {loading && (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full"></div>
       </div>
-    </div>
-  </form>
-</Dialog>;
+    )}
+    <img
+      src={`${ImagePath}/${images}`}
+      alt="Profile"
+      className={`h-20 w-40 object-contain ${
+        loading ? "hidden" : ""
+      }`}
+      onLoad={() => setLoading(false)}
+    />
+  </div>
+) : (
+  <img
+    src={NoImagePath}
+    alt="No image available"
+    className="h-20 w-35"
+  />
+)}
+</div>
+
+
+
+
