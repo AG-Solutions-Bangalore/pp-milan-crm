@@ -18,12 +18,15 @@ import {
   IconCircleX,
   IconInfoOctagon,
 } from "@tabler/icons-react";
+import { FormControlLabel, Checkbox, Typography } from "@mui/material";
 import Logout from "../../components/Logout";
 import axios from "axios";
 import BASE_URL, { ImagePath, NoImagePath } from "../../base/BaseUrl";
 import toast from "react-hot-toast";
 import SelectInput from "../../components/common/SelectInput";
 import { IconSettings } from "@tabler/icons-react";
+import { Formik, Field, Form } from "formik";
+
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = React.useState(null);
   const [openModal, setOpenModal] = React.useState(false);
@@ -31,18 +34,13 @@ const Profile = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog1, setOpenDialog1] = useState(false);
-
-  const [state, setState] = useState([]);
-
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    address: "",
-    state: "",
-    pincode: "",
+  const [settings, setSettings] = useState({
+    social_whatsapp: false,
+    social_email: false,
+    social_sms: false,
+    social_notification: false,
   });
   const [password, setPassword] = useState({
     username: "",
@@ -50,13 +48,6 @@ const Profile = () => {
     old_password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
     setPassword((prevPassword) => ({
@@ -64,64 +55,51 @@ const Profile = () => {
       [name]: value,
     }));
   };
-  const getData = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/panel-fetch-profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
 
-      // console.log("API response:", res.data);
-      setProfile(res.data.profile);
-    } catch (error) {
-      console.error("Failed to fetch profile:", error);
-      toast.error("Failed to load profile data");
-    }
-  };
-  const getStateData = async () => {
+  const getSocialData = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/panel-fetch-state`, {
+      const res = await axios.get(`${BASE_URL}/panel-fetch-socialcontrols`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      setState(res.data.state || []);
-    } catch (error) {
-      console.error("Failed to fetch profile:", error);
-    }
-  };
-  const onUpdateProfile = async (e) => {
-    e.preventDefault();
-
-    setIsButtonDisabled(true);
-
-    const data = {
-      name: profile.name,
-      email: profile.email,
-      mobile: profile.mobile,
-      address: profile.address,
-      state: profile.state,
-      pincode: profile.pincode,
-    };
-
-    try {
-      const res = await axios.post(`${BASE_URL}/panel-update-profile`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      if (res.status === 200) {
-        toast.success("Profile Updated Successfully!");
-
-        handleClose();
+      if (res.data?.socialcontrols) {
+        const socialControls = res.data.socialcontrols;
+        setSettings({
+          social_whatsapp: socialControls.social_whatsapp === "Yes",
+          social_email: socialControls.social_email === "Yes",
+          social_sms: socialControls.social_sms === "Yes",
+          social_notification: socialControls.social_notification === "Yes",
+        });
+      } else {
+        throw new Error("SocialData is missing");
       }
     } catch (error) {
-      console.error("Profile update failed:", error);
-      toast.error("Profile not Updated");
-    } finally {
-      setIsButtonDisabled(false);
+      console.error("Failed to fetch SocialData:", error);
+      toast.error("Failed to load SocialData ");
+    }
+  };
+
+  const onSubmit = async (values) => {
+    try {
+      const data = {
+        social_whatsapp: values.social_whatsapp ? "Yes" : "No",
+        social_email: values.social_email ? "Yes" : "No",
+        social_sms: values.social_sms ? "Yes" : "No",
+        social_notification: values.social_notification ? "Yes" : "No",
+      };
+
+      await axios.put(`${BASE_URL}/panel-update-socialcontrols`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      toast.success("Settings updated successfully");
+      handleClose();
+    } catch (error) {
+      toast.error("Error updating settings");
+      console.error(error);
     }
   };
 
@@ -162,8 +140,7 @@ const Profile = () => {
 
   const handleopen = () => {
     setOpenDialog(true);
-    getData();
-    getStateData();
+    getSocialData();
   };
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
@@ -227,22 +204,15 @@ const Profile = () => {
       >
         <MenuItem onClick={handleopen}>
           <ListItemIcon>
-            <IconUser width={20} />
+            <IconSettings width={20} />
           </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
+          <ListItemText>Setting</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => setOpenDialog1(true)}>
           <ListItemIcon>
             <IconMail width={20} />
           </ListItemIcon>
           <ListItemText>Change Password</ListItemText>
-        </MenuItem>
-
-        <MenuItem onClick={() => navigate("/setting")}>
-          <ListItemIcon>
-            <IconSettings width={20} />
-          </ListItemIcon>
-          <ListItemText>Setting</ListItemText>
         </MenuItem>
 
         <Box mt={1} py={1} px={2}>
@@ -257,7 +227,61 @@ const Profile = () => {
       </Menu>
 
       <Logout open={openModal} handleOpen={handleOpenLogout} />
-      {/*........................................... //Profile ......................................................*/}
+      {/* <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+        sx={{
+          backdropFilter: "blur(5px) sepia(5%)",
+          "& .MuiDialog-paper": {
+            borderRadius: "18px",
+          },
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Notification Settings
+          </Typography>
+
+          <Formik
+            initialValues={settings}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {({ values, errors, touched, handleChange }) => (
+              <Form>
+                {Object.keys(settings).map((key) => (
+                  <FormControlLabel
+                    key={key}
+                    control={
+                      <Checkbox
+                        checked={values[key]}
+                        onChange={handleChange}
+                        name={key}
+                        color="primary"
+                      />
+                    }
+                    label={key
+                      .replace("social_", "")
+                      .replace("_", " ")
+                      .toUpperCase()}
+                  />
+                ))}
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                >
+                  Save Settings
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
+      </Dialog> */}
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
@@ -270,113 +294,64 @@ const Profile = () => {
           },
         }}
       >
-        <form autoComplete="off" onSubmit={onUpdateProfile}>
-          <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <h1 className="text-slate-800 text-xl font-semibold">
-                  Personal Details
-                </h1>
+        <Box sx={{ p: 5 }}>
+          <div className="flex justify-between items-center mb-2">
+            <h1 className="text-slate-800 text-xl font-semibold">
+              Notification Settings
+            </h1>
 
-                <div className="flex " onClick={handleClose}>
-                  <Tooltip title="Close">
-                    <button type="button" className="ml-3 pl-2">
-                      <IconCircleX />
-                    </button>
-                  </Tooltip>
-                </div>
-              </div>
-
-              <div className="mt-2 p-4 ">
-                <div className="grid grid-cols-2  gap-6 mb-4">
-                  <div>
-                    <FormLabel required>Full Name</FormLabel>
-                    <input
-                      required
-                      name="name"
-                      value={profile.name}
-                      onChange={handleChange}
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <FormLabel required>Phone</FormLabel>
-                    <input
-                      required
-                      maxLength={10}
-                      name="mobile"
-                      value={profile.mobile}
-                      onChange={handleChange}
-                      className={inputClass}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <FormLabel required>Address</FormLabel>
-                  <textarea
-                    name="address"
-                    value={profile.address}
-                    onChange={handleChange}
-                    rows="3"
-                    className={inputClass}
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2  gap-6 my-4">
-                  <div>
-                    <SelectInput
-                      label="State"
-                      options={state.map((item) => ({
-                        value: item.state_name,
-                        label: item.state_name,
-                      }))}
-                      required
-                      value={profile.state || ""}
-                      name="state"
-                      onChange={(e) => setState(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <FormLabel required>Pincode</FormLabel>
-                    <input
-                      name="pincode"
-                      type="tel"
-                      maxLength={6}
-                      value={profile.pincode}
-                      onChange={handleChange}
-                      className={inputClass}
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <FormLabel required>Email</FormLabel>
-                  <input
-                    required
-                    name="email"
-                    value={profile.email}
-                    disabled
-                    onChange={handleChange}
-                    className=" cursor-not-allowed w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500 border-green-500"
-                  />
-                </div>
-
-                <div className="mt-5 flex justify-center">
-                  <Button
-                    className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 h-15 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md mr-2"
-                    disabled={isButtonDisabled}
-                    type="submit"
-                  >
-                    {isButtonDisabled ? "updating..." : "Update Profile"}
-                  </Button>
-                </div>
-              </div>
+            <div className="flex " onClick={handleClose}>
+              <Tooltip title="Close">
+                <button type="button" className="ml-3 pl-2">
+                  <IconCircleX />
+                </button>
+              </Tooltip>
             </div>
           </div>
-        </form>
+
+          <Formik
+            initialValues={settings}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {({ values, handleChange }) => (
+              <Form>
+                <Box sx={{ mb: 3 }}>
+                  {Object.keys(settings).map((key) => (
+                    <FormControlLabel
+                      key={key}
+                      control={
+                        <Checkbox
+                          checked={values[key]}
+                          onChange={handleChange}
+                          name={key}
+                          color="primary"
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontWeight: 700 }}>
+                          {key
+                            .replace("social_", "")
+                            .replace("_", " ")
+                            .toUpperCase()}
+                        </Typography>
+                      }
+                      sx={{ fontSize: "50px", mb: 1 }}
+                    />
+                  ))}
+                </Box>
+                <div className="flex justify-center">
+                  <Button
+                    className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 h-15 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md mr-2"
+                    type="submit"
+                  >
+                    Save Settings
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </Box>
       </Dialog>
       {/*........................................... //chnage password ......................................................*/}
       <Dialog

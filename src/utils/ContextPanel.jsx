@@ -48,6 +48,7 @@ const AppProvider = ({ children }) => {
           "/newregister/view",
           "testing",
           "/feedback",
+          "/notification",
         ];
 
         const isAllowedPath = allowedPath.some((path) =>

@@ -11,7 +11,7 @@ const SelectInput = ({
   ErrorMessage,
 }) => {
   const inputClassSelect =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-green-500";
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
 
   return (
     <div>

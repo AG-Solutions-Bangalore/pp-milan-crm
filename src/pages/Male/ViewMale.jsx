@@ -7,13 +7,41 @@ import ReactToPrint from "react-to-print";
 import toast from "react-hot-toast";
 import { User } from "lucide-react";
 import { Card } from "@material-tailwind/react";
-import { IconCurrencyRupee, IconFriends } from "@tabler/icons-react";
+import {
+  IconCurrencyRupee,
+  IconFriends,
+  IconPrinter,
+} from "@tabler/icons-react";
 import moment from "moment";
+
+const printStyles = `
+@media print {
+
+
+
+
+  /* Print content with 20px margin */
+  .print-content {
+    margin: 40px !important; /* Apply 20px margin to the printed content */
+
+    }
+    .print-none{
+    display:none
+    }
+    .print-p{
+    padding:10px !important;
+    }
+
+
+
+}
+`;
 const ViewMale = () => {
   const { id } = useParams();
   const printRef = useRef(null);
   const [data, setData] = useState([]);
   const [image, setImage] = useState("");
+  const tableRef = useRef(null);
 
   const getTemplateData = async () => {
     try {
@@ -44,10 +72,36 @@ const ViewMale = () => {
       </Page>
     );
   }
+  const mergeRefs =
+    (...refs) =>
+    (node) => {
+      refs.forEach((ref) => {
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      });
+    };
 
+  useEffect(() => {
+    // Add print styles to document head
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = printStyles;
+    document.head.appendChild(styleSheet);
+
+    // Cleanup on unmount
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
   return (
     <Page>
-      <div className=" container mx-auto px-4 py-6">
+      <div
+        className=" container mx-auto px-4 py-6"
+        ref={mergeRefs(printRef, tableRef)}
+      >
         <Card
           ref={printRef}
           className="w-full shadow-2xl rounded-xl print:shadow-none print:rounded-none overflow-hidden"
@@ -83,6 +137,21 @@ const ViewMale = () => {
                   </h2>
                 </div>
               </div>
+
+              <div className="text-black print-none space-x-4">
+                <ReactToPrint
+                  trigger={() => (
+                    <button
+                      variant="text"
+                      className="print-none flex items-center space-x-2 bg-white bg-opacity-50 hover:bg-opacity-70 rounded px-4 py-2 shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                      <IconPrinter className="text-lg" />
+                      <span className="text-lg font-semibold">Print</span>
+                    </button>
+                  )}
+                  content={() => printRef.current}
+                />
+              </div>
             </div>
           </div>
 
@@ -100,7 +169,7 @@ const ViewMale = () => {
                 />
                 <DetailRow
                   label="Time Of Birth"
-              value={data.profile_time_of_birth}
+                  value={data.profile_time_of_birth}
                 />
                 <DetailRow
                   label="Community"

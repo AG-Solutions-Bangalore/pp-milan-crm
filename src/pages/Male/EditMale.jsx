@@ -87,6 +87,9 @@ const EditMale = () => {
   const [selectedGender, setSelectedGender] = useState("");
   const [education, setEducation] = useState([]);
   const [payment, setPayment] = useState([]);
+  const [images, setImages] = useState("");
+
+  const [loading, setLoading] = useState(true);
 
   const [image, setImage] = useState("");
   const { id } = useParams();
@@ -108,6 +111,7 @@ const EditMale = () => {
         setMale(res.data.user);
         setSelectedGender(res.data.user.profile_gender);
         setImage(res.data.user.profile_photo);
+        setImages(res.data.user.profile_photo);
       } else {
         throw new Error("User data is missing");
       }
@@ -164,31 +168,87 @@ const EditMale = () => {
   const onSubmit = async (values) => {
     console.log("in");
     setIsButtonDisabled(true);
+    const formData = new FormData();
+    formData.append("profile_whatsapp", values.profile_whatsapp);
+    formData.append(
+      "profile_main_contact_num",
+      values.profile_main_contact_num
+    );
+    formData.append("profile_working_city", values.profile_working_city);
+    formData.append(
+      "profile_ref_contact_name",
+      values.profile_ref_contact_name
+    );
+    formData.append("profile_village_city", values.profile_village_city);
+    formData.append("profile_education", values.profile_education);
+    formData.append("profile_occupation", values.profile_occupation);
+    formData.append(
+      "profile_have_married_before",
+      values.profile_have_married_before
+    );
+    formData.append(
+      "profile_physical_disablity",
+      values.profile_physical_disablity
+    );
+    formData.append("profile_note", values.profile_note);
+    formData.append("email", values.email);
+    formData.append("name", values.name);
+    formData.append("profile_photo", image);
+    formData.append("profile_admin_note", values.profile_admin_note);
+    formData.append(
+      "profile_ref_contact_mobile",
+      values.profile_ref_contact_mobile
+    );
 
+    formData.append("profile_note", values.profile_note);
+    formData.append("profile_place_of_birth", values.profile_place_of_birth);
+    formData.append(
+      "profile_father_full_name",
+      values.profile_father_full_name
+    );
+    formData.append("profile_mobile", values.profile_mobile);
+    formData.append("profile_gotra", values.profile_ref_contact_mobile);
+
+    formData.append("profile_comunity_name", values.profile_comunity_name);
+
+    formData.append("profile_time_of_birth", values.profile_time_of_birth);
+    formData.append(
+      "profile_permanent_address",
+      values.profile_permanent_address
+    );
+    formData.append("profile_gender", values.profile_gender);
+    formData.append("profile_date_of_birth", values.profile_date_of_birth);
+    formData.append("profile_id", id);
+    formData.append("payment_amount", values.payment_amount);
+    formData.append("payment_type", values.payment_type);
+    formData.append("payment_trans", values.payment_trans);
+    formData.append("payment_status", values.payment_status);
     try {
-      await axios.put(
-        `${BASE_URL}/panel-update-male-female/${id}`,
-        {
-          profile_whatsapp: values.profile_whatsapp,
-          profile_main_contact_num: values.profile_main_contact_num,
-          profile_working_city: values.profile_working_city,
-          profile_ref_contact_name: values.profile_ref_contact_name,
-          profile_village_city: values.profile_village_city,
-          profile_education: values.profile_education,
-          profile_occupation: values.profile_occupation,
-          profile_have_married_before: values.profile_have_married_before,
-          profile_physical_disablity: values.profile_physical_disablity,
-          profile_note: values.profile_note,
-          profile_validity_ends: values.profile_validity_ends,
-          email: values.email,
-          name: values.name,
-          payment_amount: values.payment_amount,
-          payment_type: values.payment_type,
-          payment_trans: values.payment_trans,
-          payment_status: values.payment_status,
-          profile_admin_note: values.profile_admin_note,
-          profile_ref_contact_mobile: values.profile_ref_contact_mobile,
-        },
+      await axios.post(
+        `${BASE_URL}/panel-update-male-female`,
+        formData,
+        // {
+        //   profile_whatsapp: values.profile_whatsapp,
+        //   profile_main_contact_num: values.profile_main_contact_num,
+        //   profile_working_city: values.profile_working_city,
+        //   profile_ref_contact_name: values.profile_ref_contact_name,
+        //   profile_village_city: values.profile_village_city,
+        //   profile_education: values.profile_education,
+        //   profile_occupation: values.profile_occupation,
+        //   profile_have_married_before: values.profile_have_married_before,
+        //   profile_physical_disablity: values.profile_physical_disablity,
+        //   profile_note: values.profile_note,
+        //   profile_validity_ends: values.profile_validity_ends,
+        //   email: values.email,
+        //   name: values.name,
+        //   payment_amount: values.payment_amount,
+        //   payment_type: values.payment_type,
+        //   payment_trans: values.payment_trans,
+        //   payment_status: values.payment_status,
+        //   profile_admin_note: values.profile_admin_note,
+        //   profile_ref_contact_mobile: values.profile_ref_contact_mobile,
+        //   profile_photo: image,
+        // },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -213,7 +273,7 @@ const EditMale = () => {
   );
 
   const inputClass =
-    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-green-500";
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
 
   const Marrieed = [
     { value: "Yes And Divorced", label: "Yes And Divorced" },
@@ -232,7 +292,7 @@ const EditMale = () => {
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
-        <div className="sticky top-0 p-2 mb-4 border-b-2 border-green-500 bg-red-50 rounded-lg flex">
+        <div className="sticky top-0 p-2 mb-4 border-b-2 border-red-800 bg-red-50 rounded-lg flex">
           <h2 className="px-5 text-black text-lg flex items-center gap-2 p-2">
             <IconInfoCircle className="w-4 h-4" />
             Edit Male
@@ -273,7 +333,7 @@ const EditMale = () => {
           enableReinitialize
           onSubmit={onSubmit}
         >
-          {({ values, handleChange, handleBlur, formik }) => (
+          {({ values, handleChange, handleBlur, formik, setFieldValue }) => (
             <Form
               autoComplete="off"
               className="w-full max-w-7xl mx-auto  space-y-8"
@@ -504,11 +564,21 @@ const EditMale = () => {
                       </div>
                       <div className="flex justify-center">
                         {image ? (
-                          <img
-                            src={`${ImagePath}/${image}`}
-                            alt="Profile"
-                            className="h-20 w-40 object-contain"
-                          />
+                          <div className="relative h-20 w-40">
+                            {loading && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full"></div>
+                              </div>
+                            )}
+                            <img
+                              src={`${ImagePath}/${images}`}
+                              alt="Profile"
+                              className={`h-20 w-40 object-contain ${
+                                loading ? "hidden" : ""
+                              }`}
+                              onLoad={() => setLoading(false)}
+                            />
+                          </div>
                         ) : (
                           <img
                             src={NoImagePath}

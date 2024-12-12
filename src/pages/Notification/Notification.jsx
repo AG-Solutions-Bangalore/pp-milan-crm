@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../layout/Layout";
 import axios from "axios";
-import BASE_URL from "../../base/BaseUrl";
+import BASE_URL, { NotificationPath } from "../../base/BaseUrl";
 import { Tooltip } from "@mantine/core";
 import {
   MantineReactTable,
@@ -10,24 +10,28 @@ import {
   MRT_ToggleFiltersButton,
 } from "mantine-react-table";
 import { Box, Button, Center, Flex, Loader, Text } from "@mantine/core";
-import { IconEdit, IconEye, IconRadioactive } from "@tabler/icons-react";
+import { IconEdit } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { ImagePath, NoImagePath } from "../../base/BaseUrl";
-
-const Married = () => {
-  const [married, setMarried] = useState([]);
+import moment from "moment";
+const Notification = () => {
+  const [notification, setNotification] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
-  const fetchMarriedData = async () => {
+  const fetchNotification = async () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${BASE_URL}/panel-fetch-married`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setMarried(response.data?.user || []);
+      const response = await axios.get(
+        `${BASE_URL}/panel-fetch-notification-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setNotification(response.data?.notification || []);
     } catch (error) {
       console.error("Error fetching template data:", error);
     } finally {
@@ -36,19 +40,19 @@ const Married = () => {
   };
 
   useEffect(() => {
-    fetchMarriedData();
+    fetchNotification();
   }, []);
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "profile_photo",
+        accessorKey: "notification_image",
         header: "Profile Photo",
         size: 150,
         Cell: ({ row }) => {
-          const profilePhoto = row.original.profile_photo;
+          const profilePhoto = row.original.notification_image;
           const imagePath = profilePhoto
-            ? `${ImagePath}${profilePhoto}`
+            ? `${NotificationPath}${profilePhoto}`
             : NoImagePath;
           const [loading, setLoading] = useState(true);
 
@@ -100,30 +104,28 @@ const Married = () => {
       },
 
       {
-        accessorKey: "name",
-        header: "Name",
+        accessorKey: "notification_date",
+        header: "Notification Date",
+        size: 50,
+        Cell: ({ row }) => {
+          const image = moment(row.original.notification_date).format(
+            "DD-MM-YYYY"
+          );
+          return image;
+        },
+      },
+      {
+        accessorKey: "notification_heading",
+        header: "Notification Heading",
         size: 150,
       },
+
       {
-        accessorKey: "profile_gender",
-        header: "Gender",
+        accessorKey: "notification_status",
+        header: "Status",
         size: 50,
       },
-      {
-        accessorKey: "profile_father_full_name",
-        header: "Father Name",
-        size: 50,
-      },
-      {
-        accessorKey: "profile_mobile",
-        header: "Mobile Number",
-        size: 50,
-      },
-      {
-        accessorKey: "profile_place_of_birth",
-        header: "Place of Birth",
-        size: 50,
-      },
+
       {
         id: "id",
         header: "Action",
@@ -131,19 +133,11 @@ const Married = () => {
         enableHiding: false,
         Cell: ({ row }) => (
           <Flex gap="xs">
-            <Tooltip label="View" position="top" withArrow>
-              <IconEye
-                className="cursor-pointer text-blue-600 hover:text-blue-800"
-                onClick={() => {
-                  navigate(`/married/view/${row.original.id}`);
-                }}
-              />
-            </Tooltip>
             <Tooltip label="Edit" position="top" withArrow>
               <IconEdit
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
-                  navigate(`/married/edit/${row.original.id}`);
+                  navigate(`/notification/edit/${row.original.id}`);
                 }}
               />
             </Tooltip>
@@ -156,7 +150,7 @@ const Married = () => {
 
   const table = useMantineReactTable({
     columns,
-    data: married,
+    data: notification,
     enableColumnActions: false,
     enableStickyHeader: true,
     enableStickyFooter: true,
@@ -176,20 +170,20 @@ const Married = () => {
         >
           {" "}
           <Text size="xl" weight={700}>
-            Married
+            Notification
           </Text>
           <Flex gap="sm">
             <MRT_GlobalFilterTextInput table={table} />
             <MRT_ToggleFiltersButton table={table} />
 
-            {/* <Button
+            <Button
               className="w-36 text-white bg-blue-600 !important hover:bg-violet-400 hover:animate-pulse"
               onClick={() => {
-                navigate("/templates/add");
+                navigate("/notification/add");
               }}
             >
               Add
-            </Button> */}
+            </Button>
           </Flex>
         </Flex>
       );
@@ -214,4 +208,4 @@ const Married = () => {
   );
 };
 
-export default Married;
+export default Notification;
