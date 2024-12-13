@@ -579,9 +579,9 @@ const EditNewRegister = () => {
                 </div>
 
                 <div className="lg:col-span-3">
-                  <div className="border-2 h-[35rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
+                  <div className="border-2 h-[35rem] overflow-y-auto  border-red-800 rounded-lg p-2 mt-4">
                     {" "}
-                    <div className="grid grid-cols-1 p-2   gap-6">
+                    <div className="grid grid-cols-1 p-2  gap-2">
                       <DetailRow label="Name" value={values.name} />
                       <DetailRow label="Gender" value={values.profile_gender} />
                       <DetailRow

@@ -259,49 +259,6 @@ const NewRegister = () => {
       );
     },
   });
-  // const onSubmit = async (values, withEmail = true) => {
-  //   if ((withEmail = true)) {
-  //     setIsButtonDisabled(true);
-  //   } else {
-  //     setIsButtonDisabled1(true);
-  //   }
-  //   const token = localStorage.getItem("token");
-  //   const data = {
-  //     payment_amount: values.payment_amount,
-  //     payment_type: values.payment_type,
-  //     payment_trans: values.payment_trans,
-  //     profile_validity_ends: values.profile_validity_ends,
-  //   };
-  //   const endpoint = withEmail
-  //     ? `${BASE_URL}/panel-update-activation-withemail/${postId}`
-  //     : `${BASE_URL}/panel-update-activation-withoutemail/${postId}`;
-
-  //   try {
-  //     await axios.put(endpoint, data, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const successMessage = withEmail
-  //       ? "Withemail activated successfully"
-  //       : "Without email activated successfully";
-
-  //     toast.success(successMessage);
-  //     handleCloseDialog();
-  //     fetchRegisterData();
-  //   } catch (error) {
-  //     const errorMessage = withEmail
-  //       ? "Error activating with email"
-  //       : "Error activating without email";
-
-  //     toast.error(errorMessage);
-  //     console.error(error);
-  //   } finally {
-  //     setIsButtonDisabled(false);
-  //     setIsButtonDisabled1(false);
-  //   }
-  // };
   const onSubmit = async (values, withEmail = true) => {
     if (withEmail) {
       setIsButtonDisabled(true);
@@ -353,10 +310,9 @@ const NewRegister = () => {
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
   );
-  // console.log(postId);
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
-  // console.log(newregister1);
+
   return (
     <Layout>
       <Box className="max-w-screen">
@@ -389,15 +345,6 @@ const NewRegister = () => {
           enableReinitialize
           onSubmit={(values, actions) => {
             actions.resetForm();
-            // resetForm({
-            //   values: {
-            //     name: "",
-            //     payment_amount: "",
-            //     payment_type: "",
-            //     payment_trans: "",
-            //     profile_validity_ends: "",
-            //   },
-            // });
           }}
         >
           {({ values, handleChange, handleBlur, setFieldValue, resetForm }) => {

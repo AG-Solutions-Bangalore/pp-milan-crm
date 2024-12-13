@@ -10,9 +10,9 @@ import man from "/src/assets/dashboard/man.png";
 import women from "/src/assets/dashboard/woman.png";
 import bachelor from "/src/assets/dashboard/bachelor.png";
 import add from "/src/assets/dashboard/add.png";
-
 import { Center, Loader, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { IconClockX, IconMan, IconWoman } from "@tabler/icons-react";
 
 Chart.register(ArcElement, ...registerables);
 const DashboardCard = ({ title, value, icon: Icon, color, onClick }) => (
@@ -49,6 +49,8 @@ const Home = () => {
   const [result, setResult] = useState([]);
   const [loadingDashboardData, setLoadingDashboardData] = useState(true);
   const navigate = useNavigate();
+  const [newregister, setNewRegister] = useState([]);
+  const [feedback, setFeedback] = useState([]);
 
   const isLoading = loadingDashboardData;
 
@@ -63,6 +65,8 @@ const Home = () => {
       });
       if (response.status == "200") {
         setResult(response.data);
+        setNewRegister(response.data.user_new_registration);
+        setFeedback(response.data.feedbacks);
       }
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -82,13 +86,6 @@ const Home = () => {
       icon: add,
       color: "bg-green-600",
       onClick: () => navigate("/newregister"),
-    },
-    {
-      title: "Married",
-      value: result.user_married_count,
-      icon: married,
-      color: "bg-pink-600",
-      onClick: () => navigate("/married"),
     },
     {
       title: "UnMarried",
@@ -111,7 +108,22 @@ const Home = () => {
       onClick: () => navigate("/female"),
     },
   ];
-
+  const cardConfig1 = [
+    {
+      title: "Validity",
+      value: result.user_validity_expire_count,
+      icon: IconClockX,
+      color: "bg-pink-600",
+      onClick: () => navigate("/validity"),
+    },
+    {
+      title: "Married",
+      value: result.user_married_count,
+      icon: married,
+      color: "bg-pink-600",
+      onClick: () => navigate("/married"),
+    },
+  ];
   return (
     <Layout>
       <div className=" bg-gray-100 ">
@@ -124,7 +136,6 @@ const Home = () => {
           </Center>
         ) : (
           <>
-            {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {cardConfig.map((card, index) => (
                 <DashboardCard
@@ -138,8 +149,99 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Main Content Grid */}
+            <div className="grid space-x-reverse md:grid-cols-12 gap-6">
+              <div className="col-span-12 lg:col-span-5 order-last lg:order-first">
+                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 ">
+                    <span className="border-b-2 border-dashed border-red-200">
+                      NewRegister Overview
+                    </span>
+                  </h3>
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2 text-sm font-medium text-gray-700">
+                          Name
+                        </th>
+                        <th className="text-left p-2 text-sm font-medium text-gray-700">
+                          DOB
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {newregister.map((item, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="p-2 text-sm text-gray-800">
+                            <div className="flex items-center">
+                              {item.profile_gender === "Male" ? (
+                                <IconMan className="mr-2" />
+                              ) : (
+                                <IconWoman className="mr-2" />
+                              )}
+                              {item.name}
+                            </div>
+                          </td>
+                          <td className="p-2 text-sm text-gray-800">
+                            {item.profile_date_of_birth}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="col-span-12 lg:col-span-4 order-last lg:order-2">
+                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    <span className="border-b-2 border-dashed border-red-200">
+                      Feedback Overview
+                    </span>
+                  </h3>
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2 text-sm font-medium text-gray-700">
+                          Name
+                        </th>
+                        <th className="text-left p-2 text-sm font-medium text-gray-700">
+                          Description
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {feedback.map((item, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="p-2 text-sm text-gray-800">
+                            {item.from_name}
+                          </td>
+                          <td className="p-2 text-sm text-gray-800">
+                            {item.description}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="col-span-12 lg:col-span-3 order-first lg:order-3">
+                <div className="flex flex-col">
+                  <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                    {cardConfig1.map((card, index) => (
+                      <DashboardCard
+                        key={index}
+                        title={card.title}
+                        value={card.value}
+                        icon={card.icon}
+                        color={card.color}
+                        onClick={card.onClick}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            {/* Refresh Button */}
             <button
               onClick={() => {
                 fetchResult();
