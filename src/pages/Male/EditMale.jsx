@@ -8,12 +8,19 @@ import {
   IconPhone,
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
-import { ButtonGroup, Button } from "@material-tailwind/react";
+import { ButtonGroup, Button, IconButton } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../components/common/SelectInput";
-import { Box, Checkbox, FormControlLabel, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import moment from "moment";
 
 const validationSchema = Yup.object({
@@ -46,6 +53,7 @@ const validationSchema = Yup.object({
     .matches(/^\d+$/, "Amount must be only numbers")
     .required("Amount Contact is required"),
   payment_trans: Yup.string().required("PaymentTrans is required"),
+  profile_validity_ends: Yup.string().required("Validity is required"),
 });
 
 const EditMale = () => {
@@ -83,6 +91,7 @@ const EditMale = () => {
     s_email: false,
     s_sms: false,
     s_notification: false,
+    profile_validity_ends: "",
   });
 
   console.log(male, "file");
@@ -242,6 +251,7 @@ const EditMale = () => {
     formData.append("payment_type", values.payment_type);
     formData.append("payment_trans", values.payment_trans);
     formData.append("payment_status", values.payment_status);
+    formData.append("profile_validity_ends", values.profile_validity_ends);
 
     formData.append("s_whatsapp", values.s_whatsapp ? "Yes" : "No");
     formData.append("s_email", values.s_email ? "Yes" : "No");
@@ -286,7 +296,14 @@ const EditMale = () => {
     { value: "Pending", label: "Pending" },
     { value: "Received", label: "Received" },
   ];
-
+  const handleAddYear = (years, setFieldValue, values) => {
+    const currentDate = new Date(values.profile_validity_ends || new Date());
+    currentDate.setFullYear(currentDate.getFullYear() + years);
+    setFieldValue(
+      "profile_validity_ends",
+      currentDate.toISOString().split("T")[0]
+    );
+  };
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
@@ -628,8 +645,7 @@ const EditMale = () => {
                           rows="2"
                         />
                       </div>
-                      <Box sx={{ mb: 3 }}>
-                        {/* WhatsApp Checkbox */}
+                      {/* <Box sx={{ mb: 3 }}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -649,7 +665,6 @@ const EditMale = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* Email Checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -669,7 +684,6 @@ const EditMale = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* SMS Checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -689,7 +703,6 @@ const EditMale = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* Notification Checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -711,7 +724,7 @@ const EditMale = () => {
                           }
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
-                      </Box>
+                      </Box> */}
                     </div>
                   </div>
                 )}
@@ -788,14 +801,50 @@ const EditMale = () => {
                           className="text-red-500 text-xs"
                         />
                       </div>
+                      <div>
+                        <FormLabel required>Validity Date</FormLabel>
+                        <div className="flex justify-between items-center space-x-2">
+                          <IconButton
+                            type="button"
+                            onClick={() =>
+                              handleAddYear(1, setFieldValue, values)
+                            }
+                          >
+                            1
+                          </IconButton>
+
+                          <Field
+                            type="date"
+                            name="profile_validity_ends"
+                            value={values.profile_validity_ends}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={inputClass}
+                          />
+                          <ErrorMessage
+                            name="profile_validity_ends"
+                            component="div"
+                            className="text-red-500 text-xs"
+                          />
+
+                          <IconButton
+                            type="button"
+                            onClick={() =>
+                              handleAddYear(2, setFieldValue, values)
+                            }
+                          >
+                            2
+                          </IconButton>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 <div className="lg:col-span-3">
-                  <div className="border-2 h-[35rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
+                  <div className="border-2 h-[35rem] overflow-y-auto  border-red-800 rounded-lg p-2 mt-4">
                     {" "}
-                    <div className="grid grid-cols-1 p-2   gap-6">
+                    <div className="grid grid-cols-1 p-2   gap-2">
                       <DetailRow label="Name" value={values.name} />
                       <DetailRow label="Gender" value={values.profile_gender} />
                       <DetailRow

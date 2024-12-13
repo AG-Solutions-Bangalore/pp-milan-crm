@@ -35,7 +35,7 @@ const Female = () => {
   const [postId1, setPostId1] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
-  const fetchMarriedData = async () => {
+  const EditFemlaeData = async () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -53,7 +53,7 @@ const Female = () => {
   };
 
   useEffect(() => {
-    fetchMarriedData();
+    EditFemlaeData();
   }, []);
   const handleOpenDialog = (id) => {
     setPostId(id);
@@ -90,8 +90,9 @@ const Female = () => {
       );
 
       toast.success("deactivated successfully");
-      // navigate("/newregister");
+
       handleCloseDialog();
+      EditFemlaeData();
     } catch (error) {
       toast.error(" error deactivated");
       console.error(error);
@@ -325,14 +326,14 @@ const Female = () => {
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
             onClick={handleCloseDialog}
           >
-            <span>Cancel</span>
+            <span>No</span>
           </button>
           <button
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md mr-2"
             onClick={onSubmit}
             disabled={isButtonDisabled}
           >
-            {isButtonDisabled ? "Deactivating..." : "Deactivate"}
+            {isButtonDisabled ? "Deactivating..." : "Yes"}
           </button>
         </DialogFooter>
       </Dialog>

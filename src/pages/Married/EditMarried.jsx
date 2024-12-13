@@ -8,7 +8,7 @@ import {
   IconPhone,
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
-import { ButtonGroup, Button } from "@material-tailwind/react";
+import { ButtonGroup, Button, IconButton } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -53,6 +53,7 @@ const validationSchema = Yup.object({
     .matches(/^\d+$/, "Amount must be only numbers")
     .required("Amount Contact is required"),
   payment_trans: Yup.string().required("PaymentTrans is required"),
+  profile_validity_ends: Yup.string().required("Validity is required"),
 });
 
 const EditMarried = () => {
@@ -90,6 +91,7 @@ const EditMarried = () => {
     s_email: false,
     s_sms: false,
     s_notification: false,
+    profile_validity_ends: "",
   });
 
   console.log(married, "file");
@@ -242,6 +244,7 @@ const EditMarried = () => {
     formData.append("payment_type", values.payment_type);
     formData.append("payment_trans", values.payment_trans);
     formData.append("payment_status", values.payment_status);
+    formData.append("profile_validity_ends", values.profile_validity_ends);
 
     formData.append("s_whatsapp", values.s_whatsapp ? "Yes" : "No");
     formData.append("s_email", values.s_email ? "Yes" : "No");
@@ -297,6 +300,14 @@ const EditMarried = () => {
     { value: "Cheque", label: "Chequee" },
     { value: "Online", label: "Online" },
   ];
+  const handleAddYear = (years, setFieldValue, values) => {
+    const currentDate = new Date(values.profile_validity_ends || new Date());
+    currentDate.setFullYear(currentDate.getFullYear() + years);
+    setFieldValue(
+      "profile_validity_ends",
+      currentDate.toISOString().split("T")[0]
+    );
+  };
 
   return (
     <Layout>
@@ -645,76 +656,6 @@ const EditMarried = () => {
                           control={
                             <Checkbox
                               checked={values.s_whatsapp}
-                              onChange={handleChange}
-                              name="s_whatsapp"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              WHATSAPP
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_email}
-                              onChange={handleChange}
-                              name="s_email"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              EMAIL
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_sms}
-                              onChange={handleChange}
-                              name="s_sms"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              SMS
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_notification}
-                              onChange={handleChange}
-                              name="s_notification"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              NOTIFICATION
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-                      </Box> */}
-                      <Box sx={{ mb: 3 }}>
-                        {/* WhatsApp Checkbox */}
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_whatsapp}
                               onChange={() =>
                                 setFieldValue("s_whatsapp", !values.s_whatsapp)
                               }
@@ -730,7 +671,7 @@ const EditMarried = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* Email Checkbox */}
+                   
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -750,7 +691,6 @@ const EditMarried = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* SMS Checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -770,7 +710,6 @@ const EditMarried = () => {
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
 
-                        {/* Notification Checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -792,7 +731,7 @@ const EditMarried = () => {
                           }
                           sx={{ fontSize: "50px", mb: 1 }}
                         />
-                      </Box>
+                      </Box> */}
                     </div>
                   </div>
                 )}
@@ -836,10 +775,7 @@ const EditMarried = () => {
                             label: item.payment_mode,
                           }))}
                           value={values.payment_type}
-                          // required={true}
                           onChange={handleChange}
-                          // onBlur={handleBlur}
-                          // ErrorMessage={ErrorMessage}
                         />
                       </div>
                       <div>
@@ -848,10 +784,7 @@ const EditMarried = () => {
                           name="payment_status"
                           options={paymentStatus}
                           value={values.payment_status}
-                          // required={true}
                           onChange={handleChange}
-                          // onBlur={handleBlur}
-                          // ErrorMessage={ErrorMessage}
                         />
                       </div>
                       <div>
@@ -871,14 +804,51 @@ const EditMarried = () => {
                           className="text-red-500 text-xs"
                         />
                       </div>
+
+                      <div>
+                        <FormLabel required>Validity Date</FormLabel>
+                        <div className="flex justify-between items-center space-x-2">
+                          <IconButton
+                            type="button"
+                            onClick={() =>
+                              handleAddYear(1, setFieldValue, values)
+                            }
+                          >
+                            1
+                          </IconButton>
+
+                          <Field
+                            type="date"
+                            name="profile_validity_ends"
+                            value={values.profile_validity_ends}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={inputClass}
+                          />
+                          <ErrorMessage
+                            name="profile_validity_ends"
+                            component="div"
+                            className="text-red-500 text-xs"
+                          />
+
+                          <IconButton
+                            type="button"
+                            onClick={() =>
+                              handleAddYear(2, setFieldValue, values)
+                            }
+                          >
+                            2
+                          </IconButton>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 <div className="lg:col-span-3">
-                  <div className="border-2 h-[35rem] overflow-y-auto border-green-400 rounded-lg p-2 mt-4">
+                  <div className="h-[35rem] overflow-y-auto border-2 border-red-800 rounded-lg p-2 mt-4">
                     {" "}
-                    <div className="grid grid-cols-1 p-2   gap-6">
+                    <div className="grid grid-cols-1 p-2   gap-2">
                       <DetailRow label="Name" value={values.name} />
                       <DetailRow label="Gender" value={values.profile_gender} />
                       <DetailRow
