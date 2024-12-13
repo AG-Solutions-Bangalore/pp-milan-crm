@@ -52,18 +52,51 @@ const Validity = () => {
           const imagePath = profilePhoto
             ? `${ImagePath}${profilePhoto}`
             : NoImagePath;
+          const [loading, setLoading] = useState(true);
 
           return (
-            <img
-              src={imagePath}
-              alt={profilePhoto ? "Profile" : "No Profile"}
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
+            <div
+              style={{ position: "relative", width: "50px", height: "50px" }}
+            >
+              {loading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* Simple loader */}
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(0, 0, 0, 0.1)",
+                      borderTop: "2px solid #4F46E5",
+                      borderRadius: "50%",
+                      animation: "spin 1s linear infinite",
+                    }}
+                  />
+                </div>
+              )}
+              <img
+                src={imagePath}
+                alt={profilePhoto ? "Profile" : "No Profile"}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  display: loading ? "none" : "block",
+                }}
+                onLoad={() => setLoading(false)}
+              />
+            </div>
           );
         },
       },
@@ -103,7 +136,7 @@ const Validity = () => {
               <IconEye
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
-                  navigate(`/templates/view/${row.original.id}`);
+                  navigate(`/validity/view/${row.original.id}`);
                 }}
               />
             </Tooltip>
@@ -111,18 +144,18 @@ const Validity = () => {
               <IconEdit
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
-                  navigate(`/templates/edit/${row.original.id}`);
+                  navigate(`/validity/edit/${row.original.id}`);
                 }}
               />
             </Tooltip>
-            <Tooltip label="Activation" position="top" withArrow>
+            {/* <Tooltip label="Activation" position="top" withArrow>
               <IconRadioactive
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
                 onClick={() => {
                   navigate(`/templates/activate/${row.original.id}`);
                 }}
               />
-            </Tooltip>
+            </Tooltip> */}
           </Flex>
         ),
       },

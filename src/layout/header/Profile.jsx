@@ -227,61 +227,7 @@ const Profile = () => {
       </Menu>
 
       <Logout open={openModal} handleOpen={handleOpenLogout} />
-      {/* <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-        sx={{
-          backdropFilter: "blur(5px) sepia(5%)",
-          "& .MuiDialog-paper": {
-            borderRadius: "18px",
-          },
-        }}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Notification Settings
-          </Typography>
-
-          <Formik
-            initialValues={settings}
-            onSubmit={onSubmit}
-            enableReinitialize
-          >
-            {({ values, errors, touched, handleChange }) => (
-              <Form>
-                {Object.keys(settings).map((key) => (
-                  <FormControlLabel
-                    key={key}
-                    control={
-                      <Checkbox
-                        checked={values[key]}
-                        onChange={handleChange}
-                        name={key}
-                        color="primary"
-                      />
-                    }
-                    label={key
-                      .replace("social_", "")
-                      .replace("_", " ")
-                      .toUpperCase()}
-                  />
-                ))}
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                >
-                  Save Settings
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </Box>
-      </Dialog> */}
+    
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
