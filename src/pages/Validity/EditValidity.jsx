@@ -13,14 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../components/common/SelectInput";
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Tab, Tabs, Typography } from "@mui/material";
 import moment from "moment";
 
 const validationSchema = Yup.object({
@@ -55,9 +48,9 @@ const validationSchema = Yup.object({
   payment_trans: Yup.string().required("PaymentTrans is required"),
 });
 
-const EditMarried = () => {
+const EditValidity = () => {
   const [activeTab, setActiveTab] = useState("contact");
-  const [married, setMarried] = useState({
+  const [validity, setValidity] = useState({
     name: "",
     profile_date_of_birth: "",
     profile_gender: "",
@@ -92,7 +85,7 @@ const EditMarried = () => {
     s_notification: false,
   });
 
-  console.log(married, "file");
+  console.log(validity, "file");
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
@@ -109,17 +102,24 @@ const EditMarried = () => {
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-  const getTemplateData = async () => {
+  const getValidityData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-by-id/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      // if (res.data?.user) {
+      //   setValidity(res.data.user);
+      //   setSelectedGender(res.data.user.profile_gender);
+      //   setImage(res.data.user.profile_photo);
+      //   setImages(res.data.user.profile_photo);
+      // }
       if (res.data?.user) {
         const user = res.data.user;
-        setMarried({
-          ...married,
+        setValidity({
+          ...validity,
           ...user,
           s_whatsapp: user.s_whatsapp === "Yes",
           s_email: user.s_email === "Yes",
@@ -137,7 +137,6 @@ const EditMarried = () => {
       toast.error("Failed to load user data");
     }
   };
-
   const getPayment = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-payment-mode`, {
@@ -177,7 +176,7 @@ const EditMarried = () => {
   };
 
   useEffect(() => {
-    getTemplateData();
+    getValidityData();
     getEducationdata();
     getPayment();
   }, [id]);
@@ -247,7 +246,6 @@ const EditMarried = () => {
     formData.append("s_email", values.s_email ? "Yes" : "No");
     formData.append("s_sms", values.s_sms ? "Yes" : "No");
     formData.append("s_notification", values.s_notification ? "Yes" : "No");
-
     try {
       await axios.post(
         `${BASE_URL}/panel-update-male-female`,
@@ -259,10 +257,10 @@ const EditMarried = () => {
           },
         }
       );
-      toast.success("Married Updated Successfully");
-      navigate("/married");
+      toast.success("Validity Updated Successfully");
+      navigate("/validity");
     } catch (error) {
-      toast.error("Error updating Married");
+      toast.error("Error updating Validity");
       console.error(error);
     } finally {
       setIsButtonDisabled(false);
@@ -304,7 +302,7 @@ const EditMarried = () => {
         <div className="sticky top-0 p-2 mb-4 border-b-2 border-red-800 bg-red-50 rounded-lg flex">
           <h2 className="px-5 text-black text-lg flex items-center gap-2 p-2">
             <IconInfoCircle className="w-4 h-4" />
-            Edit Married
+            Edit Validity
           </h2>
 
           <Tabs
@@ -337,12 +335,12 @@ const EditMarried = () => {
           {/* </Box> */}
         </div>
         <Formik
-          initialValues={married}
+          initialValues={validity}
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={onSubmit}
         >
-          {({ values, handleChange, handleBlur, setFieldValue }) => (
+          {({ values, handleChange, handleBlur, formik, setFieldValue }) => (
             <Form
               autoComplete="off"
               className="w-full max-w-7xl mx-auto  space-y-8"
@@ -639,76 +637,6 @@ const EditMarried = () => {
                           rows="2"
                         />
                       </div>
-
-                      {/* <Box sx={{ mb: 3 }}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_whatsapp}
-                              onChange={handleChange}
-                              name="s_whatsapp"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              WHATSAPP
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_email}
-                              onChange={handleChange}
-                              name="s_email"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              EMAIL
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_sms}
-                              onChange={handleChange}
-                              name="s_sms"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              SMS
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={values.s_notification}
-                              onChange={handleChange}
-                              name="s_notification"
-                              color="primary"
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontWeight: 700 }}>
-                              NOTIFICATION
-                            </Typography>
-                          }
-                          sx={{ fontSize: "50px", mb: 1 }}
-                        />
-                      </Box> */}
                       <Box sx={{ mb: 3 }}>
                         {/* WhatsApp Checkbox */}
                         <FormControlLabel
@@ -936,7 +864,7 @@ const EditMarried = () => {
 
                 <Button
                   className="w-36 text-white bg-red-600"
-                  onClick={() => navigate("/married")}
+                  onClick={() => navigate("/validity")}
                 >
                   Back
                 </Button>
@@ -961,4 +889,4 @@ const DetailRow = ({ icon, label, value }) => (
   </div>
 );
 
-export default EditMarried;
+export default EditValidity;

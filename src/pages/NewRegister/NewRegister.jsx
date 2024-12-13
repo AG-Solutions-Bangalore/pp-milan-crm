@@ -41,7 +41,6 @@ const paymentType = [
 const NewRegister = () => {
   const [newregister, setNewRegister] = useState([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
   const [isButtonDisabled1, setIsButtonDisabled1] = useState(false);
 
   const [newregister1, setNewRegister1] = useState({
@@ -110,7 +109,6 @@ const NewRegister = () => {
   };
   const columns = useMemo(
     () => [
-
       {
         accessorKey: "profile_photo",
         header: "Profile Photo",
@@ -261,8 +259,56 @@ const NewRegister = () => {
       );
     },
   });
+  // const onSubmit = async (values, withEmail = true) => {
+  //   if ((withEmail = true)) {
+  //     setIsButtonDisabled(true);
+  //   } else {
+  //     setIsButtonDisabled1(true);
+  //   }
+  //   const token = localStorage.getItem("token");
+  //   const data = {
+  //     payment_amount: values.payment_amount,
+  //     payment_type: values.payment_type,
+  //     payment_trans: values.payment_trans,
+  //     profile_validity_ends: values.profile_validity_ends,
+  //   };
+  //   const endpoint = withEmail
+  //     ? `${BASE_URL}/panel-update-activation-withemail/${postId}`
+  //     : `${BASE_URL}/panel-update-activation-withoutemail/${postId}`;
+
+  //   try {
+  //     await axios.put(endpoint, data, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     const successMessage = withEmail
+  //       ? "Withemail activated successfully"
+  //       : "Without email activated successfully";
+
+  //     toast.success(successMessage);
+  //     handleCloseDialog();
+  //     fetchRegisterData();
+  //   } catch (error) {
+  //     const errorMessage = withEmail
+  //       ? "Error activating with email"
+  //       : "Error activating without email";
+
+  //     toast.error(errorMessage);
+  //     console.error(error);
+  //   } finally {
+  //     setIsButtonDisabled(false);
+  //     setIsButtonDisabled1(false);
+  //   }
+  // };
   const onSubmit = async (values, withEmail = true) => {
-    setIsButtonDisabled(true);
+    if (withEmail) {
+      setIsButtonDisabled(true);
+    } else {
+      setIsButtonDisabled1(true);
+    }
+
     const token = localStorage.getItem("token");
     const data = {
       payment_amount: values.payment_amount,
@@ -282,7 +328,7 @@ const NewRegister = () => {
       });
 
       const successMessage = withEmail
-        ? "Withemail activated successfully"
+        ? "With email activated successfully"
         : "Without email activated successfully";
 
       toast.success(successMessage);
@@ -297,6 +343,7 @@ const NewRegister = () => {
       console.error(error);
     } finally {
       setIsButtonDisabled(false);
+      setIsButtonDisabled1(false);
     }
   };
 
@@ -469,7 +516,8 @@ const NewRegister = () => {
                       <div className="mt-5 flex justify-center">
                         <Button
                           className="w-36 text-white bg-blue-600 mx-4"
-                          type="submit"
+                          // type="submit"
+                          type="button"
                           disabled={isButtonDisabled}
                           onClick={() => onSubmit(values, true)}
                         >
@@ -477,7 +525,8 @@ const NewRegister = () => {
                         </Button>
                         <Button
                           className="w-36 text-white bg-blue-600"
-                          type="submit"
+                          // type="submit"
+                          type="button"
                           disabled={isButtonDisabled1}
                           onClick={() => onSubmit(values, false)}
                         >

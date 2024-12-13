@@ -13,7 +13,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../components/common/SelectInput";
-import { Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import moment from "moment";
 
 const validationSchema = Yup.object({
@@ -79,6 +86,10 @@ const EditMarried = () => {
     payment_trans: "",
     payment_status: "",
     profile_admin_note: "",
+    s_whatsapp: false,
+    s_email: false,
+    s_sms: false,
+    s_notification: false,
   });
 
   console.log(married, "file");
@@ -105,9 +116,16 @@ const EditMarried = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (res.data?.user) {
-        setMarried(res.data.user);
+        const user = res.data.user;
+        setMarried({
+          ...married,
+          ...user,
+          s_whatsapp: user.s_whatsapp === "Yes",
+          s_email: user.s_email === "Yes",
+          s_sms: user.s_sms === "Yes",
+          s_notification: user.s_notification === "Yes",
+        });
         setSelectedGender(res.data.user.profile_gender);
         setImage(res.data.user.profile_photo);
         setImages(res.data.user.profile_photo);
@@ -119,6 +137,7 @@ const EditMarried = () => {
       toast.error("Failed to load user data");
     }
   };
+
   const getPayment = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/panel-fetch-payment-mode`, {
@@ -224,6 +243,11 @@ const EditMarried = () => {
     formData.append("payment_trans", values.payment_trans);
     formData.append("payment_status", values.payment_status);
 
+    formData.append("s_whatsapp", values.s_whatsapp ? "Yes" : "No");
+    formData.append("s_email", values.s_email ? "Yes" : "No");
+    formData.append("s_sms", values.s_sms ? "Yes" : "No");
+    formData.append("s_notification", values.s_notification ? "Yes" : "No");
+
     try {
       await axios.post(
         `${BASE_URL}/panel-update-male-female`,
@@ -318,7 +342,7 @@ const EditMarried = () => {
           enableReinitialize
           onSubmit={onSubmit}
         >
-          {({ values, handleChange, handleBlur, formik, setFieldValue }) => (
+          {({ values, handleChange, handleBlur, setFieldValue }) => (
             <Form
               autoComplete="off"
               className="w-full max-w-7xl mx-auto  space-y-8"
@@ -615,6 +639,160 @@ const EditMarried = () => {
                           rows="2"
                         />
                       </div>
+
+                      {/* <Box sx={{ mb: 3 }}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_whatsapp}
+                              onChange={handleChange}
+                              name="s_whatsapp"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              WHATSAPP
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_email}
+                              onChange={handleChange}
+                              name="s_email"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              EMAIL
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_sms}
+                              onChange={handleChange}
+                              name="s_sms"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              SMS
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_notification}
+                              onChange={handleChange}
+                              name="s_notification"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              NOTIFICATION
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+                      </Box> */}
+                      <Box sx={{ mb: 3 }}>
+                        {/* WhatsApp Checkbox */}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_whatsapp}
+                              onChange={() =>
+                                setFieldValue("s_whatsapp", !values.s_whatsapp)
+                              }
+                              name="s_whatsapp"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              WHATSAPP
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        {/* Email Checkbox */}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_email}
+                              onChange={() =>
+                                setFieldValue("s_email", !values.s_email)
+                              }
+                              name="s_email"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              EMAIL
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        {/* SMS Checkbox */}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_sms}
+                              onChange={() =>
+                                setFieldValue("s_sms", !values.s_sms)
+                              }
+                              name="s_sms"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              SMS
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+
+                        {/* Notification Checkbox */}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={values.s_notification}
+                              onChange={() =>
+                                setFieldValue(
+                                  "s_notification",
+                                  !values.s_notification
+                                )
+                              }
+                              name="s_notification"
+                              color="primary"
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontWeight: 700 }}>
+                              NOTIFICATION
+                            </Typography>
+                          }
+                          sx={{ fontSize: "50px", mb: 1 }}
+                        />
+                      </Box>
                     </div>
                   </div>
                 )}

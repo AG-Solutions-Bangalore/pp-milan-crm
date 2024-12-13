@@ -24,7 +24,9 @@ const DashboardCard = ({ title, value, icon: Icon, color, onClick }) => (
     <div className="p-6 border-b border-gray-100">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
+          <p className="text-sm font-medium text-gray-500 mb-1 hover:border-dashed hover:border-b-2 hover:border-black">
+            {title}
+          </p>
           <h3 className="text-2xl font-bold text-gray-900">
             <CountUp end={value} separator="," />
           </h3>

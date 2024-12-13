@@ -36,7 +36,7 @@ const printStyles = `
 
 }
 `;
-const ViewMarriage = () => {
+const ViewValidity = () => {
   const { id } = useParams();
   const printRef = useRef(null);
   const [data, setData] = useState([]);
@@ -252,4 +252,4 @@ const DetailRow = ({ icon, label, value }) => (
   </div>
 );
 
-export default ViewMarriage;
+export default ViewValidity;

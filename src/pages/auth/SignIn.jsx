@@ -39,7 +39,7 @@ const SignIn = () => {
   const [loading1, setLoading1] = useState(false);
   const navigate = useNavigate();
   const inputClass =
-    "w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border-green-500";
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true);

@@ -114,7 +114,7 @@ const ViewNewRegister = () => {
                     <img
                       src={`${ImagePath}/${image}`}
                       alt="Profile"
-                      className="h-20 w-20 md:h-32 md:w-32  rounded-full border-8 border-white/30"
+                      className="h-20 w-20 md:h-32 md:w-32 rounded-full border-8 border-white/30"
                     />
                   ) : (
                     <img
@@ -137,6 +137,7 @@ const ViewNewRegister = () => {
                   </h2>
                 </div>
               </div>
+
               <div className="text-black print-none space-x-4">
                 <ReactToPrint
                   trigger={() => (
@@ -159,7 +160,7 @@ const ViewNewRegister = () => {
               <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
                 <User className="mr-3 h-6 w-6" /> Personal Information
               </h2>
-              <div className="grid md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <DetailRow
                   label="Date Of Birth"
                   value={moment(data.profile_date_of_birth).format(
@@ -174,18 +175,15 @@ const ViewNewRegister = () => {
                   label="Community"
                   value={data.profile_comunity_name}
                 />
-
                 <DetailRow label="Gotra" value={data.profile_gotra} />
-
-                {/* <DetailRow label="Email" value={data.email} /> */}
               </div>
             </div>
 
             <div className="bg-secondary/10 p-5 print:rounded-none rounded-lg">
               <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
-                <IconFriends className="mr-3 h-6 w-6 " /> Family Details
+                <IconFriends className="mr-3 h-6 w-6" /> Family Details
               </h2>
-              <div className="grid md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <DetailRow label="Education" value={data.profile_education} />
                 <DetailRow label="Occupation" value={data.profile_occupation} />
                 <DetailRow label="Whatsapp No" value={data.profile_whatsapp} />
@@ -199,10 +197,10 @@ const ViewNewRegister = () => {
                 />
                 <DetailRow
                   label="Refrence Mobile No"
-                  value={data.profile_main_contact_num}
+                  value={data.profile_ref_contact_num}
                 />
                 <DetailRow
-                  label="Physical Disablity (if any)"
+                  label="Physical Disability (if any)"
                   value={data.profile_physical_disablity}
                 />
                 <DetailRow
@@ -230,7 +228,7 @@ const ViewNewRegister = () => {
               <h2 className="text-xl font-semibold mb-4 flex items-center text-black/90">
                 <IconCurrencyRupee className="mr-3 h-6 w-6" /> Payment Details
               </h2>
-              <div className="grid md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <DetailRow label="Payment Amount" value={data.payment_amount} />
                 <DetailRow label="Payment Type" value={data.payment_type} />
                 <DetailRow label="Payment Status" value={data.payment_status} />
