@@ -17,13 +17,16 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+
+import toast from "react-hot-toast";
 import {
   Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from "@material-tailwind/react";
-import toast from "react-hot-toast";
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
+} from "@mui/material";
 const Feedback = () => {
   const [feedback, setFeedback] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -184,10 +187,31 @@ const Feedback = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
+        fullWidth
+        maxWidth="sm"
       >
-        <DialogHeader>Confirm Feedback Delete</DialogHeader>
-        <DialogBody>Are you sure you want to Delete this Feedback?</DialogBody>
-        <DialogFooter>
+        <DialogTitle
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            my: "10px",
+          }}
+        >
+          Confirm Feedback Delete{" "}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{
+              fontSize: "15px",
+              my: "10px",
+            }}
+          >
+            Are you sure you want to Delete this Feedback?{" "}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <button
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
             onClick={handleCloseDialog}
@@ -201,7 +225,7 @@ const Feedback = () => {
           >
             {isButtonDisabled ? "Deleting..." : "Delete"}
           </button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </Layout>
   );

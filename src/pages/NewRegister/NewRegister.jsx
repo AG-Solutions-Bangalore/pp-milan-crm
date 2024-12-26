@@ -19,7 +19,7 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { ImagePath, NoImagePath } from "../../base/BaseUrl";
-import { Dialog, FormLabel } from "@mui/material";
+import { Dialog, FormLabel, Slide } from "@mui/material";
 import { ButtonGroup, Button } from "@material-tailwind/react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -340,6 +340,8 @@ const NewRegister = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         <Formik
           initialValues={newregister1}
@@ -374,7 +376,7 @@ const NewRegister = () => {
                       </h1>
 
                       <div className="flex" onClick={handleCloseDialog}>
-                        <Tooltip title="Close">
+                        <Tooltip label="Close" position="top" withArrow>
                           <button type="button" className="ml-3 pl-2">
                             <IconCircleX />
                           </button>
