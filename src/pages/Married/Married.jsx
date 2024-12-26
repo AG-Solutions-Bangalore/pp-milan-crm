@@ -98,12 +98,7 @@ const Married = () => {
     setOpenDialog1(false);
     setPostId(null);
   };
-  const onSubmit = async (
-    values,
-    withEmail = true,
-    onSubmitProps,
-    { setSubmitting, resetForm }
-  ) => {
+  const onSubmit = async (values, withEmail = true, actions) => {
     if (withEmail) {
       setIsButtonDisabled(true);
     } else {
@@ -133,8 +128,6 @@ const Married = () => {
         : "Without email activated successfully";
 
       toast.success(successMessage);
-      onSubmitProps.setSubmitting(false);
-      onSubmitProps.resetForm();
       handleCloseDialog();
       fetchMarriedData();
     } catch (error) {
@@ -158,6 +151,7 @@ const Married = () => {
   );
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
+    const RandomValue = Date.now();
 
   const columns = useMemo(
     () => [
@@ -168,7 +162,7 @@ const Married = () => {
         Cell: ({ row }) => {
           const profilePhoto = row.original.profile_photo;
           const imagePath = profilePhoto
-            ? `${ImagePath}${profilePhoto}`
+            ? `${ImagePath}${profilePhoto}?t=${RandomValue}`
             : NoImagePath;
           const [loading, setLoading] = useState(true);
 
@@ -339,154 +333,161 @@ const Married = () => {
           },
         }}
       >
-        <Formik
-          initialValues={newregister1}
-          validationSchema={validationSchema}
-          enableReinitialize
-          onSubmit={(values, actions) => {
-            actions.resetForm();
-          }}
-        >
-          {({ values, handleChange, handleBlur, setFieldValue, resetForm }) => {
-            const handleAddYear = (years) => {
-              const currentDate = new Date(
-                values.profile_validity_ends || new Date()
-              );
-              currentDate.setFullYear(currentDate.getFullYear() + years);
-              setFieldValue(
-                "profile_validity_ends",
-                currentDate.toISOString().split("T")[0]
-              );
-            };
+        {openDialog1 && (
+          <Formik
+            initialValues={newregister1}
+            validationSchema={validationSchema}
+            enableReinitialize
+            onSubmit={(values, actions) => onSubmit(values, true, actions)}
+          >
+            {({
+              values,
+              handleChange,
+              handleBlur,
+              setFieldValue,
+              resetForm,
+            }) => {
+              const handleAddYear = (years) => {
+                const currentDate = new Date(
+                  values.profile_validity_ends || new Date()
+                );
+                currentDate.setFullYear(currentDate.getFullYear() + years);
+                setFieldValue(
+                  "profile_validity_ends",
+                  currentDate.toISOString().split("T")[0]
+                );
+              };
+              console.log("Formik ResetForm: ", resetForm);
 
-            return (
-              <Form
-                autoComplete="off"
-                className="w-full max-w-7xl mx-auto space-y-8"
-              >
-                <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <h1 className="text-slate-800 text-xl font-semibold">
-                        Activation
-                      </h1>
+              return (
+                <Form
+                  autoComplete="off"
+                  className="w-full max-w-7xl mx-auto space-y-8"
+                >
+                  <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <h1 className="text-slate-800 text-xl font-semibold">
+                          Activation
+                        </h1>
 
-                      <div className="flex" onClick={handleCloseDialog}>
-                        <Tooltip title="Close">
-                          <button type="button" className="ml-3 pl-2">
-                            <IconCircleX />
-                          </button>
-                        </Tooltip>
+                        <div className="flex" onClick={handleCloseDialog}>
+                          <Tooltip title="Close">
+                            <button type="button" className="ml-3 pl-2">
+                              <IconCircleX />
+                            </button>
+                          </Tooltip>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="mt-2 p-4">
-                      <div className="grid grid-cols-1 p-2 gap-6">
-                        <div>
-                          <FormLabel required>Payment Amount</FormLabel>
-                          <Field
-                            type="number"
-                            name="payment_amount"
-                            value={values.payment_amount}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className={inputClass}
-                          />
-                          <ErrorMessage
-                            name="payment_amount"
-                            component="div"
-                            className="text-red-500 text-xs"
-                          />
-                        </div>
-                        <div>
-                          <SelectInput
-                            label="Payment Type"
-                            name="payment_type"
-                            options={payment.map((item) => ({
-                              value: item.payment_mode,
-                              label: item.payment_mode,
-                            }))}
-                            value={values.payment_type}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            ErrorMessage={ErrorMessage}
-                          />
-                        </div>
-                        <div>
-                          <FormLabel required>Validity Date</FormLabel>
-                          <div className="flex justify-between space-x-2">
-                            <IconButton
-                              type="button"
-                              onClick={() => handleAddYear(1)}
-                            >
-                              1
-                            </IconButton>
+                      <div className="mt-2 p-4">
+                        <div className="grid grid-cols-1 p-2 gap-6">
+                          <div>
+                            <FormLabel required>Payment Amount</FormLabel>
                             <Field
-                              type="date"
-                              name="profile_validity_ends"
-                              value={values.profile_validity_ends}
+                              type="number"
+                              name="payment_amount"
+                              value={values.payment_amount}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               className={inputClass}
                             />
                             <ErrorMessage
-                              name="profile_validity_ends"
+                              name="payment_amount"
                               component="div"
                               className="text-red-500 text-xs"
                             />
-                            <IconButton
-                              type="button"
-                              onClick={() => handleAddYear(2)}
-                            >
-                              2
-                            </IconButton>
+                          </div>
+                          <div>
+                            <SelectInput
+                              label="Payment Type"
+                              name="payment_type"
+                              options={payment.map((item) => ({
+                                value: item.payment_mode,
+                                label: item.payment_mode,
+                              }))}
+                              value={values.payment_type}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              ErrorMessage={ErrorMessage}
+                            />
+                          </div>
+                          <div>
+                            <FormLabel required>Validity Date</FormLabel>
+                            <div className="flex justify-between space-x-2">
+                              <IconButton
+                                type="button"
+                                onClick={() => handleAddYear(1)}
+                              >
+                                1
+                              </IconButton>
+                              <Field
+                                type="date"
+                                name="profile_validity_ends"
+                                value={values.profile_validity_ends}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                className={inputClass}
+                              />
+                              <ErrorMessage
+                                name="profile_validity_ends"
+                                component="div"
+                                className="text-red-500 text-xs"
+                              />
+                              <IconButton
+                                type="button"
+                                onClick={() => handleAddYear(2)}
+                              >
+                                2
+                              </IconButton>
+                            </div>
+                          </div>
+
+                          <div>
+                            <FormLabel>Payment Trans</FormLabel>
+                            <Field
+                              type="text"
+                              name="payment_trans"
+                              value={values.payment_trans}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              className={inputClass}
+                            />
+                            <ErrorMessage
+                              name="payment_trans"
+                              component="div"
+                              className="text-red-500 text-xs"
+                            />
                           </div>
                         </div>
-
-                        <div>
-                          <FormLabel>Payment Trans</FormLabel>
-                          <Field
-                            type="text"
-                            name="payment_trans"
-                            value={values.payment_trans}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className={inputClass}
-                          />
-                          <ErrorMessage
-                            name="payment_trans"
-                            component="div"
-                            className="text-red-500 text-xs"
-                          />
+                        <div className="mt-5 flex justify-center">
+                          <Button
+                            className="w-36 text-white bg-blue-600 mx-4"
+                            // type="submit"
+                            type="button"
+                            disabled={isButtonDisabled}
+                            onClick={() => onSubmit(values, true)}
+                          >
+                            {isButtonDisabled ? "Updating..." : "With Mail"}
+                          </Button>
+                          <Button
+                            className="w-36 text-white bg-blue-600"
+                            // type="submit"
+                            type="button"
+                            disabled={isButtonDisabled1}
+                            onClick={() => onSubmit(values, false)}
+                          >
+                            {isButtonDisabled1 ? "Updating..." : "Without Mail"}
+                          </Button>
                         </div>
-                      </div>
-                      <div className="mt-5 flex justify-center">
-                        <Button
-                          className="w-36 text-white bg-blue-600 mx-4"
-                          // type="submit"
-                          type="button"
-                          disabled={isButtonDisabled}
-                          onClick={() => onSubmit(values, true)}
-                        >
-                          {isButtonDisabled ? "Updating..." : "With Mail"}
-                        </Button>
-                        <Button
-                          className="w-36 text-white bg-blue-600"
-                          // type="submit"
-                          type="button"
-                          disabled={isButtonDisabled1}
-                          onClick={() => onSubmit(values, false)}
-                        >
-                          {isButtonDisabled1 ? "Updating..." : "Without Mail"}
-                        </Button>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
+                </Form>
+              );
+            }}
+          </Formik>
+        )}
       </Dialog>
     </Layout>
   );

@@ -241,6 +241,7 @@ const EditNewRegister = () => {
     { value: "Cheque", label: "Chequee" },
     { value: "Online", label: "Online" },
   ];
+  const RandomValue = Date.now();
 
   return (
     <Layout>
@@ -492,21 +493,7 @@ const EditNewRegister = () => {
                         className="text-red-500 text-xs"
                       />
                     </div>
-                    {/* <div className="flex justify-center">
-                      {image ? (
-                        <img
-                          src={`${ImagePath}/${images}`}
-                          alt="Profile"
-                          className="h-20 w-40 object-contain"
-                        />
-                      ) : (
-                        <img
-                          src={NoImagePath}
-                          alt="No image available"
-                          className="h-20 w-35"
-                        />
-                      )}
-                    </div> */}
+
                     <div className="flex justify-center">
                       {image ? (
                         <div className="relative h-20 w-40">
@@ -516,7 +503,7 @@ const EditNewRegister = () => {
                             </div>
                           )}
                           <img
-                            src={`${ImagePath}/${images}`}
+                            src={`${ImagePath}/${images}?t=${RandomValue}`}
                             alt="Profile"
                             className={`h-20 w-40 object-contain ${
                               loading ? "hidden" : ""

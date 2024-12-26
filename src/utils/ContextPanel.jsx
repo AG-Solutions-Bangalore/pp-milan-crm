@@ -46,7 +46,7 @@ const AppProvider = ({ children }) => {
           "/validity",
           "/newregister/edit",
           "/newregister/view",
-          "testing",
+          "/testing",
           "/feedback",
           "/notification",
         ];

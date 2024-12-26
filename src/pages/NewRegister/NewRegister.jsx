@@ -107,6 +107,8 @@ const NewRegister = () => {
     setOpenDialog1(false);
     setPostId(null);
   };
+  const RandomValue = Date.now();
+
   const columns = useMemo(
     () => [
       {
@@ -116,7 +118,7 @@ const NewRegister = () => {
         Cell: ({ row }) => {
           const profilePhoto = row.original.profile_photo;
           const imagePath = profilePhoto
-            ? `${ImagePath}${profilePhoto}`
+            ? `${ImagePath}${profilePhoto}?t=${RandomValue}`
             : NoImagePath;
           const [loading, setLoading] = useState(true);
 

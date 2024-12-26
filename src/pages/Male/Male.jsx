@@ -107,7 +107,7 @@ const Male = () => {
       );
 
       toast.success("Reset successfully");
-      // navigate("/newregister");
+      handleCloseDialog1();
     } catch (error) {
       toast.error(" error on  Reset");
       console.error(error);
@@ -119,6 +119,7 @@ const Male = () => {
   useEffect(() => {
     fetchMaleData();
   }, []);
+  const RandomValue = Date.now();
 
   const columns = useMemo(
     () => [
@@ -129,7 +130,7 @@ const Male = () => {
         Cell: ({ row }) => {
           const profilePhoto = row.original.profile_photo;
           const imagePath = profilePhoto
-            ? `${ImagePath}${profilePhoto}`
+            ? `${ImagePath}${profilePhoto}?t=${RandomValue}`
             : NoImagePath;
           const [loading, setLoading] = useState(true);
 
@@ -355,7 +356,7 @@ const Male = () => {
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
             onClick={handleCloseDialog1}
           >
-            <span>Cancel</span>
+            <span>No</span>
           </button>
           <button
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-blue-600 hover:bg-green-700 p-2 rounded-lg shadow-md mr-2"
@@ -363,7 +364,7 @@ const Male = () => {
             disabled={isButtonDisabled}
           >
             {/* <span>Confirm</span> */}
-            {isButtonDisabled ? "Resetting..." : "Reset"}
+            {isButtonDisabled ? "Resetting..." : "Yes"}
           </button>
         </DialogFooter>
       </Dialog>
