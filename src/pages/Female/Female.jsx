@@ -18,13 +18,21 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { ImagePath, NoImagePath } from "../../base/BaseUrl";
+// import {
+//   Dialog,
+//   DialogBody,
+//   DialogFooter,
+//   DialogHeader,
+// } from "@material-tailwind/react";
+import toast from "react-hot-toast";
 import {
   Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from "@material-tailwind/react";
-import toast from "react-hot-toast";
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
+} from "@mui/material";
 const Female = () => {
   const [female, setFemale] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -308,7 +316,7 @@ const Female = () => {
           <MantineReactTable table={table} />
         )}
       </Box>
-      <Dialog
+      {/* <Dialog
         open={openDialog1}
         onClose={handleCloseDialog}
         keepMounted
@@ -319,10 +327,46 @@ const Female = () => {
             borderRadius: "18px",
           },
         }}
+      > */}
+
+      <Dialog
+        open={openDialog1}
+        onClose={handleCloseDialog}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+        sx={{
+          backdropFilter: "blur(5px) sepia(5%)",
+
+          "& .MuiDialog-paper": {
+            borderRadius: "18px",
+          },
+        }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
+        fullWidth
+        maxWidth="sm"
       >
-        <DialogHeader>Confirm Deavtivation</DialogHeader>
-        <DialogBody>Are you sure you want to Deavtivation?</DialogBody>
-        <DialogFooter>
+        <DialogTitle
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            my: "10px",
+          }}
+        >
+          Confirm Deavtivation
+        </DialogTitle>
+        <DialogContent>
+          {" "}
+          <DialogContentText
+            sx={{
+              fontSize: "15px",
+              my: "10px",
+            }}
+          >
+            Are you sure you want to Deavtivation?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <button
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
             onClick={handleCloseDialog}
@@ -336,7 +380,7 @@ const Female = () => {
           >
             {isButtonDisabled ? "Deactivating..." : "Yes"}
           </button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
 
       {/* //resetdevice */}
@@ -351,10 +395,32 @@ const Female = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
+        fullWidth
+        maxWidth="sm"
       >
-        <DialogHeader>Confirm Reset</DialogHeader>
-        <DialogBody>Are you sure you want to Reset?</DialogBody>
-        <DialogFooter>
+        <DialogTitle
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            my: "10px",
+          }}
+        >
+          Confirm Reset
+        </DialogTitle>
+        <DialogContent>
+          {" "}
+          <DialogContentText
+            sx={{
+              fontSize: "15px",
+              my: "10px",
+            }}
+          >
+            Are you sure you want to Reset?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <button
             className="text-center text-sm font-[400] cursor-pointer hover:animate-pulse w-36 text-white bg-red-600 hover:bg-red-400 p-2 rounded-lg shadow-md mr-2"
             onClick={handleCloseDialog1}
@@ -369,7 +435,7 @@ const Female = () => {
             {/* <span>Confirm</span> */}
             {isButtonDisabled ? "Resetting..." : "Yes"}
           </button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </Layout>
   );

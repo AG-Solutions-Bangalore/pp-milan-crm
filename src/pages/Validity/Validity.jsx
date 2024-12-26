@@ -149,14 +149,6 @@ const Validity = () => {
                 }}
               />
             </Tooltip>
-            {/* <Tooltip label="Activation" position="top" withArrow>
-              <IconRadioactive
-                className="cursor-pointer text-blue-600 hover:text-blue-800"
-                onClick={() => {
-                  navigate(`/templates/activate/${row.original.id}`);
-                }}
-              />
-            </Tooltip> */}
           </Flex>
         ),
       },
@@ -191,15 +183,6 @@ const Validity = () => {
           <Flex gap="sm">
             <MRT_GlobalFilterTextInput table={table} />
             <MRT_ToggleFiltersButton table={table} />
-
-            {/* <Button
-              className="w-36 text-white bg-blue-600 !important hover:bg-violet-400 hover:animate-pulse"
-              onClick={() => {
-                navigate("/templates/add");
-              }}
-            >
-              Add
-            </Button> */}
           </Flex>
         </Flex>
       );

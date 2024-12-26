@@ -22,7 +22,7 @@ const printStyles = `
 
   /* Print content with 20px margin */
   .print-content {
-    margin: 40px !important; /* Apply 20px margin to the printed content */
+    margin: 10px !important; /* Apply 20px margin to the printed content */
 
     }
     .print-none{

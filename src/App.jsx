@@ -64,7 +64,7 @@ const App = () => {
         <Route path="/notification" element={<Notification />} />
         <Route path="/notification/add" element={<CreateNotification />} />
         <Route path="/notification/edit/:id" element={<EditNotification />} />
-        <Route path="/test/:id" element={<Testing/>} />
+        <Route path="/test/edit/:id" element={<Testing/>} />
       </Routes>
     </>
   );

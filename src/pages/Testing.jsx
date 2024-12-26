@@ -120,42 +120,42 @@ const Testing = () => {
           className="w-full shadow-2xl rounded-xl print:shadow-none print:rounded-none overflow-hidden "
         >
           <div
-            className="text-white p-6 "
-            style={{
-              backgroundImage: `url(${images})`, // Replace with your background image URL
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+            className="text-black p-6 "
+            // style={{
+            //   backgroundImage: `url(${images})`, // Replace with your background image URL
+            //   backgroundSize: "cover",
+            //   backgroundPosition: "center",
+            // }}
           >
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               {/* Left: Name Section */}
-              <div className="flex flex-col items-center  md:w-1/3 text-white">
-                <h1 className="text-4xl md:text-3xl font-bold mb-2 ">
-                  {datas.name}
-                </h1>
-              </div>
-
-              {/* Center: Image Section */}
-              <div className="flex justify-center md:w-1/3">
-                <div className="flex justify-center rounded-full">
-                  {image ? (
-                    <img
-                      src={`${ImagePath}/${image}`}
-                      alt="Profile"
-                      className="h-20 w-20 md:h-32 md:w-32 rounded-full border-8 border-white/30"
-                    />
-                  ) : (
-                    <img
-                      src={NoImagePath}
-                      alt="No image available"
-                      className="h-20 w-20 md:h-32 md:w-32 rounded-full"
-                    />
-                  )}
+              <div className="flex flex-col items-center  md:w-1/3 text-black">
+                <div className="flex justify-center ">
+                  <div className="flex justify-center rounded-full">
+                    {image ? (
+                      <img
+                        src={`${ImagePath}/${image}`}
+                        alt="Profile"
+                        className="h-20 w-20 md:h-32 md:w-32 rounded-full border-8 border-black/30"
+                      />
+                    ) : (
+                      <img
+                        src={NoImagePath}
+                        alt="No image available"
+                        className="h-20 w-20 md:h-32 md:w-32 rounded-full"
+                      />
+                    )}
+                  </div>
+                  <h1 className="text-4xl md:text-3xl font-bold mb-2 ">
+                    {datas.name}
+                  </h1>
                 </div>
+
+                {/* Center: Image Section */}
               </div>
 
               {/* Right: Contact Information Section */}
-              <div className="flex flex-col items-start md:items-start md:w-1/3 text-white space-y-4 ">
+              <div className="flex flex-col items-start md:items-start md:w-1/3 text-black space-y-4 ">
                 {/* Phone */}
                 <div className="flex items-center space-x-2">
                   <IconPhone className="text-pink-400 text-xl" />
@@ -170,7 +170,7 @@ const Testing = () => {
                 {/* Email */}
                 <div className="flex items-center space-x-2">
                   <IconExclamationCircle className="text-pink-400 text-xl" />
-                  <span className="text-lg">02.37</span>
+                  <span className="text-lg ">02.37</span>
                 </div>
 
                 {/* Address */}

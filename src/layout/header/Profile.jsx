@@ -7,10 +7,10 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Dialog,
+  Slide,
 } from "@mui/material";
-import { Button } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import {
   IconMail,
@@ -227,7 +227,7 @@ const Profile = () => {
       </Menu>
 
       <Logout open={openModal} handleOpen={handleOpenLogout} />
-    
+
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
@@ -239,6 +239,8 @@ const Profile = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         <Box sx={{ p: 5 }}>
           <div className="flex justify-between items-center mb-2">
@@ -247,7 +249,7 @@ const Profile = () => {
             </h1>
 
             <div className="flex " onClick={handleClose}>
-              <Tooltip title="Close">
+              <Tooltip label="Close" position="top" withArrow>
                 <button type="button" className="ml-3 pl-2">
                   <IconCircleX />
                 </button>
@@ -311,6 +313,8 @@ const Profile = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         <form autoComplete="off" onSubmit={onChangePassword}>
           <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
@@ -321,7 +325,7 @@ const Profile = () => {
                 </h1>
 
                 <div className="flex " onClick={handleClose1}>
-                  <Tooltip title="Close">
+                  <Tooltip label="Close" position="top" withArrow>
                     <button type="button" className="ml-3 pl-2">
                       <IconCircleX />
                     </button>

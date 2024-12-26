@@ -22,7 +22,7 @@ const printStyles = `
 
   /* Print content with 20px margin */
   .print-content {
-    margin: 40px !important; /* Apply 20px margin to the printed content */
+    margin: 10px !important; /* Apply 20px margin to the printed content */
 
     }
     .print-none{
@@ -99,7 +99,7 @@ const ViewNewRegister = () => {
   return (
     <Page>
       <div
-        className=" container mx-auto px-4 py-6"
+        className="print-content mx-auto px-4 py-6"
         ref={mergeRefs(printRef, tableRef)}
       >
         <Card

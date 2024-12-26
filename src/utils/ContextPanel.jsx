@@ -49,6 +49,7 @@ const AppProvider = ({ children }) => {
           "/testing",
           "/feedback",
           "/notification",
+          "/test",
         ];
 
         const isAllowedPath = allowedPath.some((path) =>

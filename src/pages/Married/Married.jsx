@@ -16,7 +16,7 @@ import {
   IconCircleX,
   IconRadioactive,
 } from "@tabler/icons-react";
-import { Dialog, FormLabel } from "@mui/material";
+import { Dialog, FormLabel, Slide } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../components/common/SelectInput";
@@ -151,7 +151,7 @@ const Married = () => {
   );
   const inputClass =
     "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
-    const RandomValue = Date.now();
+  const RandomValue = Date.now();
 
   const columns = useMemo(
     () => [
@@ -332,6 +332,8 @@ const Married = () => {
             borderRadius: "18px",
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         {openDialog1 && (
           <Formik
@@ -372,7 +374,7 @@ const Married = () => {
                         </h1>
 
                         <div className="flex" onClick={handleCloseDialog}>
-                          <Tooltip title="Close">
+                          <Tooltip label="Close" position="top" withArrow>
                             <button type="button" className="ml-3 pl-2">
                               <IconCircleX />
                             </button>
