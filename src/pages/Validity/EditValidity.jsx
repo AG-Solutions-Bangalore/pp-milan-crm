@@ -300,11 +300,7 @@ const EditValidity = () => {
     { value: "Pending", label: "Pending" },
     { value: "Received", label: "Received" },
   ];
-  const paymentType = [
-    { value: "Cash", label: "Cash" },
-    { value: "Cheque", label: "Chequee" },
-    { value: "Online", label: "Online" },
-  ];
+
   const handleAddYear = (years, setFieldValue, values) => {
     const currentDate = new Date(values.profile_validity_ends || new Date());
     currentDate.setFullYear(currentDate.getFullYear() + years);
@@ -313,6 +309,9 @@ const EditValidity = () => {
       currentDate.toISOString().split("T")[0]
     );
   };
+
+  const RandomValue = Date.now();
+
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
@@ -595,7 +594,7 @@ const EditValidity = () => {
                               </div>
                             )}
                             <img
-                              src={`${ImagePath}/${images}`}
+                              src={`${ImagePath}/${images}?t=${RandomValue}`}
                               alt="Profile"
                               className={`h-20 w-40 object-contain ${
                                 loading ? "hidden" : ""

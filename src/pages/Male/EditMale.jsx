@@ -304,6 +304,8 @@ const EditMale = () => {
       currentDate.toISOString().split("T")[0]
     );
   };
+
+  const RandomValue = Date.now();
   return (
     <Layout>
       <div className="bg-white p-4 rounded-lg">
@@ -565,15 +567,11 @@ const EditMale = () => {
                         <FormLabel>Photo </FormLabel>
                         <input
                           type="file"
-                          // value={values.profile_main_contact_num}
-                          // onChange={handleFileChange}
                           onChange={(e) => {
                             const file = e.target.files[0];
-                            setImage(file); // Update local state for the image
-                            setFieldValue("profile_photo", file); // Update Formik field value
+                            setImage(file);
+                            setFieldValue("profile_photo", file);
                           }}
-                          // required
-                          // onBlur={handleBlur}
                           className={inputClass}
                         />
                       </div>
@@ -586,7 +584,7 @@ const EditMale = () => {
                               </div>
                             )}
                             <img
-                              src={`${ImagePath}/${images}`}
+                              src={`${ImagePath}/${images}?t=${RandomValue}`}
                               alt="Profile"
                               className={`h-20 w-40 object-contain ${
                                 loading ? "hidden" : ""

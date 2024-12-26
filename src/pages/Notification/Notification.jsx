@@ -42,6 +42,7 @@ const Notification = () => {
   useEffect(() => {
     fetchNotification();
   }, []);
+  const RandomValue = Date.now();
 
   const columns = useMemo(
     () => [
@@ -52,7 +53,7 @@ const Notification = () => {
         Cell: ({ row }) => {
           const profilePhoto = row.original.notification_image;
           const imagePath = profilePhoto
-            ? `${NotificationPath}${profilePhoto}`
+            ? `${NotificationPath}${profilePhoto}?t=${RandomValue}`
             : NoImagePath;
           const [loading, setLoading] = useState(true);
 
