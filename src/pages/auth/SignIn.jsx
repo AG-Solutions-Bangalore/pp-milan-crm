@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import BASE_URL from "../../base/BaseUrl";
 import logo from "../../assets/receipt/ag_logo.png";
+import { Slide } from "@mui/material";
 
 const validationSchema = Yup.object({
   username: Yup.string()
@@ -154,6 +155,14 @@ const SignIn = () => {
     },
   ];
 
+  const handle1 = () => {
+    setShowForm(false);
+    setShowForgotPasswordDialog(true);
+  };
+  const handle2 = () => {
+    setShowForm(true);
+    setShowForgotPasswordDialog(false);
+  };
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <Toaster position="top-right" reverseOrder={false} />
@@ -183,6 +192,8 @@ const SignIn = () => {
             },
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         <div className="bg-white shadow-xl rounded-2xl p-6 max-w-sm w-full relative">
           <button
@@ -263,7 +274,7 @@ const SignIn = () => {
           <div className="text-right mt-4">
             <Link
               className="text-sm text-gray-700 hover:text-blue-600"
-              onClick={() => setShowForgotPasswordDialog(true)}
+              onClick={handle1}
             >
               Forgot password?
             </Link>
@@ -282,6 +293,8 @@ const SignIn = () => {
             },
           },
         }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
       >
         <div className="bg-white shadow-xl rounded-2xl p-6 max-w-sm w-full relative h-[28rem]">
           <button
@@ -356,6 +369,14 @@ const SignIn = () => {
               </Form>
             )}
           </Formik>
+          <div className="text-right mt-4">
+            <Link
+              className="text-sm text-gray-700 hover:text-blue-600"
+              onClick={handle2}
+            >
+              Sigin?
+            </Link>
+          </div>
         </div>
       </Dialog>
 

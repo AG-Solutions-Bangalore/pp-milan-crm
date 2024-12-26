@@ -13,6 +13,7 @@ import add from "/src/assets/dashboard/add.png";
 import { Center, Loader, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { IconClockX, IconMan, IconWoman } from "@tabler/icons-react";
+import moment from "moment";
 
 Chart.register(ArcElement, ...registerables);
 const DashboardCard = ({ title, value, icon: Icon, color, onClick }) => (
@@ -182,7 +183,9 @@ const Home = () => {
                             </div>
                           </td>
                           <td className="p-2 text-sm text-gray-800">
-                            {item.profile_date_of_birth}
+                            {moment(item.profile_date_of_birth).format(
+                              "DD-MMM-YYYY"
+                            )}
                           </td>
                         </tr>
                       ))}
