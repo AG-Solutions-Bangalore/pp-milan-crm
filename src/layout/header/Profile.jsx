@@ -164,30 +164,31 @@ const Profile = () => {
 
   return (
     <Box>
-      <IconButton
-        size="large"
-        aria-label="show 11 new notifications"
-        color="inherit"
-        aria-controls="msgs-menu"
-        aria-haspopup="true"
-        sx={{
-          ...(typeof anchorEl2 === "object" && {
-            color: "primary.main",
-          }),
-        }}
-        onClick={handleClick2}
-      >
-        <Avatar
-          src={imagePath}
-          alt="image"
+      <Tooltip label="BioData" position="top" withArrow>
+        <IconButton
+          size="large"
+          aria-label="show 11 new notifications"
+          color="inherit"
+          aria-controls="msgs-menu"
+          aria-haspopup="true"
           sx={{
-            width: 35,
-            height: 35,
-            padding: "4px",
+            ...(typeof anchorEl2 === "object" && {
+              color: "primary.main",
+            }),
           }}
-        />
-      </IconButton>
-
+          onClick={handleClick2}
+        >
+          <Avatar
+            src={imagePath}
+            alt="image"
+            sx={{
+              width: 35,
+              height: 35,
+              padding: "4px",
+            }}
+          />
+        </IconButton>
+      </Tooltip>
       <Menu
         id="msgs-menu"
         anchorEl={anchorEl2}

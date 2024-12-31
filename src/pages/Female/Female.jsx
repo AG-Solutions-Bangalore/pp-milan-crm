@@ -255,7 +255,7 @@ const Female = () => {
             overflowX: "auto",
             maxWidth: "100%",
           }}
-          flexWrap="wrap"
+          // flexWrap="wrap"
         >
           {" "}
           <Text size="xl" weight={700}>
