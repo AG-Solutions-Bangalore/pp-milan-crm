@@ -66,7 +66,7 @@ const Feedback = () => {
 
     try {
       await axios.put(
-        `${BASE_URL}/panel-update-deactivation/${postId}`,
+        `${BASE_URL}/panel-delete-feedback/${postId}`,
         {},
         {
           headers: {
@@ -75,11 +75,11 @@ const Feedback = () => {
         }
       );
 
-      toast.success("deactivated successfully");
-      // navigate("/newregister");
+      toast.success("Feedaback Deleted successfully");
+      fetchFeedbackdata();
       handleCloseDialog();
     } catch (error) {
-      toast.error(" error deactivated");
+      toast.error(" error Feedaback");
       console.error(error);
     } finally {
       setIsButtonDisabled(false);
@@ -146,7 +146,7 @@ const Feedback = () => {
             overflowX: "auto",
             maxWidth: "100%",
           }}
-          flexWrap="wrap"
+          // flexWrap="wrap"
         >
           {" "}
           <Text size="xl" weight={700}>

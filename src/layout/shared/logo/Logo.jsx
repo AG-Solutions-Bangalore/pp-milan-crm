@@ -20,12 +20,12 @@ const Logo = ({ isCollapsed }) => {
       {!isCollapsed ? (
         <LinkStyled to="/home">
           <div className="flex justify-center">
-            <img src={logo} alt="logo" className="h-16" priority />
+            <img src={logo} alt="logo" className="h-16"  />
           </div>
         </LinkStyled>
       ) : (
         <LargeLinkStyled to="/home">
-          <img src={logo} alt="logo" className="h-16" priority />
+          <img src={logo} alt="logo" className="h-16"  />
         </LargeLinkStyled>
       )}
     </>

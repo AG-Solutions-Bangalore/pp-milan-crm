@@ -6,7 +6,6 @@ import {
   styled,
   Stack,
   IconButton,
-  Tooltip,
 } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -18,6 +17,7 @@ import { IconDownload } from "@tabler/icons-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import BASE_URL from "../../base/BaseUrl";
+import { Tooltip } from "@mantine/core";
 
 const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
   const handleDownload = async () => {
@@ -97,8 +97,8 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
         <Box flexGrow={1} />
 
         <Stack spacing={1} direction="row" alignItems="center">
-          <Tooltip title="BioData" arrow>
-            {" "}
+        <Tooltip label="BioData" position="top" withArrow>
+ 
             <IconDownload
               width={20}
               className="cursor-pointer text-black"
@@ -107,9 +107,7 @@ const Header = ({ toggleMobileSidebar, toggleSidebar }) => {
           </Tooltip>
         </Stack>
         <Stack spacing={1} direction="row" alignItems="center">
-          <Tooltip title="Profile" arrow>
-            <Profile />
-          </Tooltip>
+          <Profile />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>
