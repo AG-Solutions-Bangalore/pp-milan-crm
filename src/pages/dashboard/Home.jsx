@@ -14,6 +14,7 @@ import { Center, Loader, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { IconClockX, IconMan, IconWoman } from "@tabler/icons-react";
 import moment from "moment";
+import CombinedPieChart from "./CombinedPieChart";
 
 Chart.register(ArcElement, ...registerables);
 const DashboardCard = ({ title, value, icon: Icon, color, onClick }) => (
@@ -51,6 +52,7 @@ const Home = () => {
   const [loadingDashboardData, setLoadingDashboardData] = useState(true);
   const navigate = useNavigate();
   const [newregister, setNewRegister] = useState([]);
+  // const [dashboardData, setDashboardData] = useState({});
   const [feedback, setFeedback] = useState([]);
 
   const isLoading = loadingDashboardData;
@@ -68,6 +70,7 @@ const Home = () => {
         setResult(response.data);
         setNewRegister(response.data.user_new_registration);
         setFeedback(response.data.feedbacks);
+        // setDashboardData()
       }
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -243,7 +246,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-
+            <CombinedPieChart dashboardData={result} />
             {/* Refresh Button */}
             <button
               onClick={() => {

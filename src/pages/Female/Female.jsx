@@ -15,15 +15,11 @@ import {
   IconEye,
   IconRadioactive,
   IconRefresh,
+  IconCircleX,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { ImagePath, NoImagePath } from "../../base/BaseUrl";
-// import {
-//   Dialog,
-//   DialogBody,
-//   DialogFooter,
-//   DialogHeader,
-// } from "@material-tailwind/react";
+import descriptionData from "../../json/emailjson.json";
 import toast from "react-hot-toast";
 import {
   Dialog,
@@ -33,16 +29,36 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
+import { Checkbox } from "@material-tailwind/react";
+import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+
+const validationSchemaEmail = Yup.object({
+  description_message: Yup.string().required("Description is Required"),
+});
 const Female = () => {
   const [female, setFemale] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog1, setOpenDialog1] = useState(false);
   const [postId, setPostId] = useState(null);
-
   const [openDialog, setOpenDialog] = useState(false);
   const [postId1, setPostId1] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
+  const [emailCheckDialog, setEmailCheckDialog] = useState(false);
+  const [isButtonDisabledEmail, setIsButtonDisabledEmail] = useState(false);
+  const [emailCheck, setEmailCheck] = useState({
+    user_data: [],
+    description_message: descriptionData?.description,
+  });
+  const handleCheckBoxChange = (e, id) => {
+    setEmailCheck((prev) => {
+      const updatedUserData = e.target.checked
+        ? [...prev.user_data, id]
+        : prev.user_data.filter((item) => item !== id);
+      return { ...prev, user_data: updatedUserData };
+    });
+  };
   const EditFemlaeData = async () => {
     setIsLoading(true);
     try {
@@ -185,9 +201,14 @@ const Female = () => {
         size: 50,
       },
       {
-        accessorKey: "profile_mobile",
+        accessorKey: "profile_main_contact_num",
         header: "Mobile Number",
         size: 50,
+      },
+      {
+        accessorKey: "profile_gotra",
+        header: "Gotra",
+        size: 20,
       },
       {
         accessorKey: "profile_place_of_birth",
@@ -200,7 +221,16 @@ const Female = () => {
         size: 50,
         enableHiding: false,
         Cell: ({ row }) => (
-          <Flex gap="xs">
+          <Flex gap="xs" className="items-center">
+            <Tooltip label="Email" position="top" withArrow>
+              <Checkbox
+                className="w-4 h-4"
+                color="blue"
+                key={row.original.id}
+                checked={emailCheck.user_data.includes(row.original.id)}
+                onChange={(e) => handleCheckBoxChange(e, row.original.id)}
+              />
+            </Tooltip>
             <Tooltip label="View" position="top" withArrow>
               <IconEye
                 className="cursor-pointer text-blue-600 hover:text-blue-800"
@@ -234,7 +264,7 @@ const Female = () => {
         ),
       },
     ],
-    []
+    [emailCheck]
   );
 
   const table = useMantineReactTable({
@@ -261,18 +291,16 @@ const Female = () => {
           <Text size="xl" weight={700}>
             Female
           </Text>
-          <Flex gap="sm">
+          <Flex gap="sm" className="items-center">
             <MRT_GlobalFilterTextInput table={table} />
             <MRT_ToggleFiltersButton table={table} />
-
-            {/* <Button
-              className="w-36 text-white bg-blue-600 !important hover:bg-violet-400 hover:animate-pulse"
-              onClick={() => {
-                navigate("/templates/add");
-              }}
+            <Button
+              className="w-36 text-white bg-blue-600 hover:bg-violet-400 hover:animate-pulse"
+              onClick={() => setEmailCheckDialog(true)}
+              disabled={emailCheck.user_data.length === 0}
             >
-              Add
-            </Button> */}
+              Send Mail
+            </Button>
           </Flex>
         </Flex>
       );
@@ -302,6 +330,53 @@ const Female = () => {
       setIsButtonDisabled(false);
     }
   };
+  const onSubmitEmail = async (values) => {
+    const token = localStorage.getItem("token");
+    const data = {
+      user_data: emailCheck.user_data.join(","),
+      description_message: values.description_message,
+    };
+
+    try {
+      setIsButtonDisabledEmail(true);
+      const response = await axios.post(
+        `${BASE_URL}/panel-send-mail-to-user`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.code == 200) {
+        toast.success(response.data.msg);
+        setEmailCheckDialog(false);
+        setEmailCheck({
+          user_data: [],
+          description_message: descriptionData?.description,
+        });
+      } else if (response.data.code == 400) {
+        toast.error(response.data.msg);
+      } else {
+        toast.error("Failed to Send Mail");
+      }
+    } catch (error) {
+      toast.error("Failed to Send Mail");
+      console.error(error);
+    } finally {
+      setIsButtonDisabledEmail(false);
+    }
+  };
+
+  const FormLabel = ({ children, required }) => (
+    <label className="block text-sm font-semibold text-black mb-1">
+      {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+  const inputClass =
+    "w-full px-3 py-2 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-300 border-red-200";
+
   return (
     <Layout>
       <Box className="max-w-screen">
@@ -316,18 +391,6 @@ const Female = () => {
           <MantineReactTable table={table} />
         )}
       </Box>
-      {/* <Dialog
-        open={openDialog1}
-        onClose={handleCloseDialog}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-        sx={{
-          backdropFilter: "blur(5px) sepia(5%)",
-          "& .MuiDialog-paper": {
-            borderRadius: "18px",
-          },
-        }}
-      > */}
 
       <Dialog
         open={openDialog1}
@@ -436,6 +499,103 @@ const Female = () => {
             {isButtonDisabled ? "Resetting..." : "Yes"}
           </button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={emailCheckDialog}
+        onClose={() => setEmailCheckDialog(false)}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+        sx={{
+          backdropFilter: "blur(5px) sepia(5%)",
+          "& .MuiDialog-paper": {
+            borderRadius: "18px",
+          },
+        }}
+        TransitionComponent={Slide}
+        transitionDuration={500}
+      >
+        {" "}
+        <Formik
+          initialValues={emailCheck}
+          validationSchema={validationSchemaEmail}
+          enableReinitialize
+          onSubmit={(values, actions) => {
+            actions.resetForm();
+          }}
+        >
+          {({ values, handleChange, handleBlur }) => {
+            return (
+              <Form
+                autoComplete="off"
+                className="w-full max-w-7xl mx-auto space-y-8"
+              >
+                <div className="p-6 space-y-1 sm:w-[280px] md:w-[500px] bg-white rounded-2xl shadow-md">
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <h1 className="text-slate-800 text-xl font-semibold">
+                        Email Send
+                      </h1>
+
+                      <div
+                        className="flex"
+                        onClick={() => setEmailCheckDialog(false)}
+                      >
+                        <Tooltip label="Close" position="top" withArrow>
+                          <button type="button" className="ml-3 pl-2">
+                            <IconCircleX />
+                          </button>
+                        </Tooltip>
+                      </div>
+                    </div>
+
+                    <div className="mt-2 p-4">
+                      <div className="grid grid-cols-1 p-2 gap-6">
+                        <div>
+                          <FormLabel required>Description Message</FormLabel>
+                          <Field
+                            name="description_message"
+                            value={values.description_message}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            as="textarea"
+                            className={`${inputClass} resize-y`}
+                            rows="6"
+                          />
+
+                          <ErrorMessage
+                            name="description_message"
+                            component="div"
+                            className="text-red-500 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-5 flex justify-center">
+                        <Button
+                          className="w-36 text-white bg-blue-600 mx-4"
+                          type="button"
+                          disabled={isButtonDisabledEmail}
+                          onClick={() => onSubmitEmail(values)}
+                        >
+                          {isButtonDisabledEmail
+                            ? "Submitting..."
+                            : "Send Mail"}
+                        </Button>
+                        <Button
+                          className="w-36 text-white bg-red-600"
+                          type="button"
+                          onClick={() => setEmailCheckDialog(false)}
+                        >
+                          Cancel{" "}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
       </Dialog>
     </Layout>
   );

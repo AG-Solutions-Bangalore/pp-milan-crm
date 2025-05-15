@@ -25,9 +25,12 @@ import EditNotification from "./pages/Notification/EditNotification";
 import ViewValidity from "./pages/Validity/ViewValidity";
 import EditValidity from "./pages/Validity/EditValidity";
 import Testing from "./pages/Testing";
+import DisableRightClick from "./components/common/DisableRightClick";
+import ValidationWrapper from "./components/common/ValidationWrapper";
 const App = () => {
   return (
     <>
+      <DisableRightClick />
       <Toaster
         toastOptions={{
           success: { style: { background: "#10B981", color: "#fff" } },
@@ -36,36 +39,37 @@ const App = () => {
         position="top-right"
         reverseOrder={false}
       />
-
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/register" element={<SIgnUp />} />
-        <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/maintenance" element={<Maintenance />} />
-        {/* //EMAIL MARKETING/////// */}
-        {/* //PPM */}
-        <Route path="/newregister" element={<NewRegister />} />
-        <Route path="/newregister/edit/:id" element={<EditNewRegister />} />
-        <Route path="/newregister/view/:id" element={<ViewNewRegister />} />
-        <Route path="/married" element={<Married />} />
-        <Route path="/married/edit/:id" element={<EditMarried />} />
-        <Route path="/married/view/:id" element={<ViewMarriage />} />
-        <Route path="/male" element={<Male />} />
-        <Route path="/male/edit/:id" element={<EditMale />} />
-        <Route path="/male/view/:id" element={<ViewMale />} />
-        <Route path="/female" element={<Female />} />
-        <Route path="/female/edit/:id" element={<EditFemale />} />
-        <Route path="/female/view/:id" element={<ViewFemlae />} />
-        <Route path="/validity" element={<Validity />} />
-        <Route path="/validity/view/:id" element={<ViewValidity />} />
-        <Route path="/validity/edit/:id" element={<EditValidity />} />
-        <Route path="/feedback" element={<Feedback />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/notification/add" element={<CreateNotification />} />
-        <Route path="/notification/edit/:id" element={<EditNotification />} />
-        <Route path="/test/edit/:id" element={<Testing/>} />
-      </Routes>
+      <ValidationWrapper>
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/register" element={<SIgnUp />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/maintenance" element={<Maintenance />} />
+          {/* //EMAIL MARKETING/////// */}
+          {/* //PPM */}
+          <Route path="/newregister" element={<NewRegister />} />
+          <Route path="/newregister/edit/:id" element={<EditNewRegister />} />
+          <Route path="/newregister/view/:id" element={<ViewNewRegister />} />
+          <Route path="/married" element={<Married />} />
+          <Route path="/married/edit/:id" element={<EditMarried />} />
+          <Route path="/married/view/:id" element={<ViewMarriage />} />
+          <Route path="/male" element={<Male />} />
+          <Route path="/male/edit/:id" element={<EditMale />} />
+          <Route path="/male/view/:id" element={<ViewMale />} />
+          <Route path="/female" element={<Female />} />
+          <Route path="/female/edit/:id" element={<EditFemale />} />
+          <Route path="/female/view/:id" element={<ViewFemlae />} />
+          <Route path="/validity" element={<Validity />} />
+          <Route path="/validity/view/:id" element={<ViewValidity />} />
+          <Route path="/validity/edit/:id" element={<EditValidity />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/notification/add" element={<CreateNotification />} />
+          <Route path="/notification/edit/:id" element={<EditNotification />} />
+          <Route path="/test/edit/:id" element={<Testing />} />
+        </Routes>
+      </ValidationWrapper>
     </>
   );
 };
