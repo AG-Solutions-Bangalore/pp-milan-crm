@@ -164,7 +164,7 @@ const Profile = () => {
 
   return (
     <Box>
-      <Tooltip label="BioData" position="top" withArrow>
+      <Tooltip label="Profile" position="top" withArrow>
         <IconButton
           size="large"
           aria-label="show 11 new notifications"
