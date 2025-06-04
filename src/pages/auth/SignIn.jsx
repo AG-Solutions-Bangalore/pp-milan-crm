@@ -16,8 +16,8 @@ import { Slide } from "@mui/material";
 
 const validationSchema = Yup.object({
   username: Yup.string()
-    .min(3, "Username must be at least 3 characters")
-    .required("Username is required"),
+    .min(10, "Mobile No must be at least 10 digit")
+    .required("Mobile No is required"),
   password: Yup.string()
     .max(6, "Password must be max 4 characters")
     .required("Password is required"),
@@ -25,8 +25,8 @@ const validationSchema = Yup.object({
 
 const forgotPasswordValidationSchema = Yup.object({
   username: Yup.string()
-    .min(3, "Username must be at least 3 characters")
-    .required("Username is required"),
+    .min(10, "Mobile No must be at least 3 characters")
+    .required("Mobile No is required"),
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -53,11 +53,15 @@ const SignIn = () => {
       const res = await axios.post(`${BASE_URL}/panel-login`, formData);
       console.log(res);
 
-      if (res.status === 200) {
+      if (res.data.code == 200) {
         const token = res.data.UserInfo?.token;
 
         localStorage.setItem("id", res.data.UserInfo.user.id);
         localStorage.setItem("username", res.data.UserInfo.user.name);
+        localStorage.setItem(
+          "profile_mobile",
+          res.data.UserInfo.user.profile_mobile
+        );
         localStorage.setItem(
           "user_type_id",
           res.data.UserInfo.user.profile_type
@@ -79,11 +83,14 @@ const SignIn = () => {
           setSubmitting(false);
         }
       } else {
-        toast.error("Login Failed, Please check your credentials.");
+        toast.error(
+          res.data.msg || "Login Failed, Please check your credentials."
+        );
         setLoading(false);
         setSubmitting(false);
       }
     } catch (error) {
+      console.log(error?.response?.data?.error);
       toast.error("An error occurred during login.");
       setLoading(false);
       setSubmitting(false);
@@ -222,7 +229,7 @@ const SignIn = () => {
               <Form className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-black mb-1">
-                    Enter Your Username <span className="text-red-500">*</span>
+                    Enter Your Mobile No <span className="text-red-500">*</span>
                   </label>
                   <Field
                     type="text"
@@ -322,7 +329,7 @@ const SignIn = () => {
               <Form className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-black mb-1">
-                    Enter Your Username <span className="text-red-500">*</span>
+                    Enter Your Mobile No <span className="text-red-500">*</span>
                   </label>
                   <Field
                     type="text"

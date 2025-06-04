@@ -109,7 +109,7 @@ const Profile = () => {
     const data = {
       old_password: password.old_password,
       new_password: password.password,
-      username: localStorage.getItem("username"),
+      username: localStorage.getItem("profile_mobile"),
     };
 
     try {
