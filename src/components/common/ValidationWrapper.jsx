@@ -21,12 +21,12 @@ const ValidationWrapper = ({ children }) => {
       try {
         const statusRes = await axios.get(`${BASE_URL}/panel-check-status`);
 
-        if (statusRes?.data?.success !== "ok") {
+        if (statusRes.data?.success !== "ok") {
           throw new Error("Panel status check failed");
         }
 
         const dotenvRes = await axios.get(`${BASE_URL}/panel-fetch-dotenv`);
-        const dynamicValidationKey = dotenvRes?.data?.hashKey;
+        const dynamicValidationKey = dotenvRes.data?.hashKey;
 
         if (!dynamicValidationKey) {
           throw new Error("Validation key missing from response");
@@ -41,7 +41,7 @@ const ValidationWrapper = ({ children }) => {
         }
 
         setStatus("valid");
-        if (location.pathname == "/maintenance") {
+        if (location.pathname === "/maintenance") {
           navigate("/");
         }
       } catch (error) {
@@ -58,7 +58,7 @@ const ValidationWrapper = ({ children }) => {
     };
 
     validateEnvironment();
-  }, [40000]);
+  }, [navigate]);
 
   return children;
 };
