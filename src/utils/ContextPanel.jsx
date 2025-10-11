@@ -62,10 +62,10 @@ const AppProvider = ({ children }) => {
         }
       } else {
         if (
-          currentPath === "/" ||
-          currentPath === "/register" ||
-          currentPath === "/forget-password" ||
-          currentPath === "/sign-up-page"
+          currentPath == "/" ||
+          currentPath == "/register" ||
+          currentPath == "/forgot-password" ||
+          currentPath == "/sign-up-page"
         ) {
           navigate(currentPath);
         } else {
