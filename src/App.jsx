@@ -1,36 +1,34 @@
-import { Route, Routes } from "react-router-dom";
-import Home from "./pages/dashboard/Home";
-import SignIn from "./pages/auth/SignIn";
-import SIgnUp from "./pages/auth/SIgnUp";
-import Maintenance from "./pages/maintenance/Maintenance";
-import ForgetPassword from "./pages/auth/ForgetPassword";
 import { Toaster } from "react-hot-toast";
-import NewRegister from "./pages/NewRegister/NewRegister";
-import Married from "./pages/Married/Married";
-import Male from "./pages/Male/Male";
-import Female from "./pages/Female/Female";
-import Validity from "./pages/Validity/Validity";
-import EditNewRegister from "./pages/NewRegister/EditNewRegister";
-import ViewNewRegister from "./pages/NewRegister/ViewNewRegister";
-import EditMarried from "./pages/Married/EditMarried";
-import ViewMarriage from "./pages/Married/ViewMarriage";
-import EditMale from "./pages/Male/EditMale";
-import ViewMale from "./pages/Male/ViewMale";
-import EditFemale from "./pages/Female/EditFemale";
-import ViewFemlae from "./pages/Female/ViewFemale";
+import { Route, Routes } from "react-router-dom";
+import ValidationWrapper from "./components/common/ValidationWrapper";
+import ForgetPassword from "./pages/auth/ForgetPassword";
+import SignIn from "./pages/auth/SignIn";
+import Home from "./pages/dashboard/Home";
 import Feedback from "./pages/Feedback/Feedback";
-import Notification from "./pages/Notification/Notification";
+import EditFemale from "./pages/Female/EditFemale";
+import Female from "./pages/Female/Female";
+import ViewFemlae from "./pages/Female/ViewFemale";
+import Maintenance from "./pages/maintenance/Maintenance";
+import EditMale from "./pages/Male/EditMale";
+import Male from "./pages/Male/Male";
+import ViewMale from "./pages/Male/ViewMale";
+import EditMarried from "./pages/Married/EditMarried";
+import Married from "./pages/Married/Married";
+import ViewMarriage from "./pages/Married/ViewMarriage";
+import EditNewRegister from "./pages/NewRegister/EditNewRegister";
+import NewRegister from "./pages/NewRegister/NewRegister";
+import ViewNewRegister from "./pages/NewRegister/ViewNewRegister";
 import CreateNotification from "./pages/Notification/CreateNotification";
 import EditNotification from "./pages/Notification/EditNotification";
-import ViewValidity from "./pages/Validity/ViewValidity";
-import EditValidity from "./pages/Validity/EditValidity";
+import Notification from "./pages/Notification/Notification";
 import Testing from "./pages/Testing";
-import DisableRightClick from "./components/common/DisableRightClick";
-import ValidationWrapper from "./components/common/ValidationWrapper";
+import EditValidity from "./pages/Validity/EditValidity";
+import Validity from "./pages/Validity/Validity";
+import ViewValidity from "./pages/Validity/ViewValidity";
 const App = () => {
   return (
     <>
-      <DisableRightClick />
+      {/* <DisableRightClick /> */}
       <Toaster
         toastOptions={{
           success: { style: { background: "#10B981", color: "#fff" } },
@@ -42,8 +40,7 @@ const App = () => {
       <ValidationWrapper>
         <Routes>
           <Route path="/" element={<SignIn />} />
-          <Route path="/register" element={<SIgnUp />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route path="/home" element={<Home />} />
           <Route path="/maintenance" element={<Maintenance />} />
           {/* //EMAIL MARKETING/////// */}
