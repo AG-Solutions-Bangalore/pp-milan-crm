@@ -21,14 +21,14 @@ import ViewNewRegister from "./pages/NewRegister/ViewNewRegister";
 import CreateNotification from "./pages/Notification/CreateNotification";
 import EditNotification from "./pages/Notification/EditNotification";
 import Notification from "./pages/Notification/Notification";
-import Testing from "./pages/Testing";
 import EditValidity from "./pages/Validity/EditValidity";
 import Validity from "./pages/Validity/Validity";
 import ViewValidity from "./pages/Validity/ViewValidity";
+import DisableRightClick from "./components/common/DisableRightClick";
 const App = () => {
   return (
     <>
-      {/* <DisableRightClick /> */}
+      <DisableRightClick />
       <Toaster
         toastOptions={{
           success: { style: { background: "#10B981", color: "#fff" } },
@@ -64,7 +64,6 @@ const App = () => {
           <Route path="/notification" element={<Notification />} />
           <Route path="/notification/add" element={<CreateNotification />} />
           <Route path="/notification/edit/:id" element={<EditNotification />} />
-          <Route path="/test/edit/:id" element={<Testing />} />
         </Routes>
       </ValidationWrapper>
     </>
